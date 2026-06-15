@@ -5,6 +5,16 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+main {
+  height: 90%;
+}
+
 body {
   margin: 0;
   font-family: "Inter", sans-serif;
@@ -19,4 +29,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="number"] {
   appearance: textfield;
+}
+
+button {
+  cursor: pointer;
 }

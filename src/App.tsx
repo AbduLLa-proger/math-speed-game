@@ -12,18 +12,28 @@ export const App = () => {
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyKey>("easy");
   const [selectedMode, setSelectedMode] = useState<ModeKey>("mixed");
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleStartGame = () => {
     console.log("start game", { selectedDifficulty, selectedMode });
   };
 
-  return (
-    <main className="min-h-screen bg-[#f4f7fb] px-6 py-6 text-slate-900">
-      <div className="mx-auto max-w-7xl">
-        <Header />
+  const handleToggleTheme = () => {
+    setIsDarkMode((prev) => !prev);
+  };
 
-        <section className="mt-5 grid grid-cols-[370px_1fr_420px] gap-5">
+  return (
+    <main
+      className={`min-h-screen p-5 text-slate-900 transition ${
+        isDarkMode ? "bg-slate-950" : "bg-[#f4f7fb]"
+      }`}
+    >
+      <div className="mx-auto w-[80%] h-[770px] ">
+        <Header isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />
+
+        <section className="flex mt-5 gap-5 h-[90%]">
           <Sidebar
+            isDarkMode={isDarkMode}
             selectedDifficulty={selectedDifficulty}
             selectedMode={selectedMode}
             onDifficultyChange={setSelectedDifficulty}
@@ -31,9 +41,9 @@ export const App = () => {
             onStartGame={handleStartGame}
           />
 
-          <GameBoard />
+          <GameBoard isDarkMode={isDarkMode} />
 
-          <StatsPanel />
+          <StatsPanel isDarkMode={isDarkMode} />
         </section>
       </div>
     </main>

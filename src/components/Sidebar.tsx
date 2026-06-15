@@ -4,6 +4,7 @@ export type DifficultyKey = "easy" | "medium" | "hard" | "expert";
 export type ModeKey = "plus" | "minus" | "mixed";
 
 type SidebarProps = {
+  isDarkMode: boolean;
   selectedDifficulty: DifficultyKey;
   selectedMode: ModeKey;
   onDifficultyChange: (difficulty: DifficultyKey) => void;
@@ -57,6 +58,7 @@ const modes = [
 ];
 
 export const Sidebar = ({
+  isDarkMode,
   selectedDifficulty,
   selectedMode,
   onDifficultyChange,
@@ -64,7 +66,9 @@ export const Sidebar = ({
   onStartGame,
 }: SidebarProps) => {
   return (
-    <aside className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
+    <aside
+      className={`w-[30%] overflow-y-auto rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm ${isDarkMode ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white"}`}
+    >
       <section>
         <div className="flex items-start gap-3">
           <TrendingUp
@@ -74,11 +78,15 @@ export const Sidebar = ({
           />
 
           <div>
-            <h2 className="text-[18px] font-extrabold text-slate-950">
+            <h2
+              className={`text-[18px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+            >
               Выбор сложности
             </h2>
 
-            <p className="mt-1 text-[14px] leading-6 text-slate-500">
+            <p
+              className={`mt-1 text-[14px] leading-6 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+            >
               Выбери уровень сложности
               <br />
               для игры
@@ -103,11 +111,15 @@ export const Sidebar = ({
               />
 
               <div>
-                <p className="text-[17px] font-extrabold text-slate-950">
+                <p
+                  className={`text-[17px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+                >
                   {difficulties[0].title}
                 </p>
 
-                <p className="mt-1 text-[14px] text-slate-500">
+                <p
+                  className={`mt-1 text-[14px] ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {difficulties[0].description}
                 </p>
               </div>
@@ -129,11 +141,15 @@ export const Sidebar = ({
               />
 
               <div>
-                <p className="text-[17px] font-extrabold text-slate-950">
+                <p
+                  className={`text-[17px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+                >
                   {difficulties[1].title}
                 </p>
 
-                <p className="mt-1 text-[14px] text-slate-500">
+                <p
+                  className={`mt-1 text-[14px] ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {difficulties[1].description}
                 </p>
               </div>
@@ -155,11 +171,15 @@ export const Sidebar = ({
               />
 
               <div>
-                <p className="text-[17px] font-extrabold text-slate-950">
+                <p
+                  className={`text-[17px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+                >
                   {difficulties[2].title}
                 </p>
 
-                <p className="mt-1 text-[14px] text-slate-500">
+                <p
+                  className={`mt-1 text-[14px] ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {difficulties[2].description}
                 </p>
               </div>
@@ -181,11 +201,15 @@ export const Sidebar = ({
               />
 
               <div>
-                <p className="text-[17px] font-extrabold text-slate-950">
+                <p
+                  className={`text-[17px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+                >
                   {difficulties[3].title}
                 </p>
 
-                <p className="mt-1 text-[14px] text-slate-500">
+                <p
+                  className={`mt-1 text-[14px] ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+                >
                   {difficulties[3].description}
                 </p>
               </div>
@@ -199,11 +223,15 @@ export const Sidebar = ({
           <Shuffle size={22} className="mt-1 text-blue-500" strokeWidth={2.2} />
 
           <div>
-            <h2 className="text-[18px] font-extrabold text-slate-950">
+            <h2
+              className={`text-[18px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+            >
               Выбор режима
             </h2>
 
-            <p className="mt-1 text-[14px] leading-6 text-slate-500">
+            <p
+              className={`mt-1 text-[14px] leading-6 ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+            >
               Выбери режим игры
             </p>
           </div>
@@ -227,7 +255,9 @@ export const Sidebar = ({
                 strokeWidth={2.4}
               />
 
-              <span className="text-[16px] font-medium text-slate-700">
+              <span
+                className={`text-[16px] font-medium ${isDarkMode ? "text-white" : "text-slate-700"}`}
+              >
                 {modes[0].title}
               </span>
             </button>
@@ -247,7 +277,9 @@ export const Sidebar = ({
                 strokeWidth={2.4}
               />
 
-              <span className="text-[16px] font-medium text-slate-700">
+              <span
+                className={`text-[16px] font-medium ${isDarkMode ? "text-white" : "text-slate-700"}`}
+              >
                 {modes[1].title}
               </span>
             </button>
@@ -267,7 +299,9 @@ export const Sidebar = ({
                 strokeWidth={2.4}
               />
 
-              <span className="text-[16px] font-medium text-slate-700">
+              <span
+                className={`text-[16px] font-medium ${isDarkMode ? "text-white" : "text-slate-700"}`}
+              >
                 {modes[2].title}
               </span>
             </button>
