@@ -8,14 +8,48 @@ import {
   type ModeKey,
 } from "./components/Sidebar";
 
+const difficultyRanges: Record<DifficultyKey, number> = {
+  easy: 9,
+  medium: 19,
+  hard: 49,
+  expert: 99,
+};
+
+const generateChange = (difficulty: DifficultyKey, mode: ModeKey): number => {
+  const maxChange = difficultyRanges[difficulty];
+  const value = Math.floor(Math.random() * maxChange) + 1;
+
+  if (mode === "plus") return value;
+  else if (mode === "minus") return -value;
+
+  return Math.random() > 0.5 ? value : -value;
+};
+
 export const App = () => {
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyKey>("easy");
   const [selectedMode, setSelectedMode] = useState<ModeKey>("mixed");
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const [userAnswer, setUserAnswer] = useState("");
+  const [score, setScore] = useState(0);
+  const [mistake, setMistake] = useState(0);
+  const [streak, setStreak] = useState(0);
+
+  const [previousNumber, setPreviousNumber] = useState(0);
+  const [currentNumber, setCurrentNumber] = useState(0);
+  const [round, setRound] = useState(0);
+  const [isGameStarted, setIsGameStarted] = useState(false);
+
   const handleStartGame = () => {
-    console.log("start game", { selectedDifficulty, selectedMode });
+    const startNumber = 0;
+    const change = generateChange(selectedDifficulty, selectedMode);
+    const nextNumber = startNumber + change;
+
+    setPreviousNumber(startNumber);
+    setCurrentNumber(nextNumber);
+    setRound(1);
+    setIsGameStarted(true);
   };
 
   const handleToggleTheme = () => {
@@ -44,7 +78,17 @@ export const App = () => {
           </div>
 
           <div className="order-1 min-h-0 lg:order-2">
-            <GameBoard isDarkMode={isDarkMode} />
+            <GameBoard
+              isDarkMode={isDarkMode}
+              previousNumber={previousNumber}
+              currentNumber={currentNumber}
+              round={round}
+              totalRounds={10}
+              isGameStarted={isGameStarted}
+              userAnswer={userAnswer}
+              onAnswerChange={setUserAnswer}
+              onSubmitAnswer={handleSubmitAnswer}
+            />
           </div>
 
           <div className="order-3 min-h-0 lg:col-span-2 xl:col-span-1">
