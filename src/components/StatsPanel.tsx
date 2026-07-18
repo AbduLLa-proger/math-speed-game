@@ -172,6 +172,7 @@ export const StatsPanel = ({ isDarkMode }: { isDarkMode: boolean }) => {
               to={item.to}
               answer={item.answer}
               correct={item.correct}
+              isDarkMode={isDarkMode}
             />
           ))}
         </div>
@@ -192,12 +193,23 @@ type HistoryItemProps = {
   to: string;
   answer: string;
   correct: boolean;
+  isDarkMode: boolean;
 };
 
-const HistoryItem = ({ from, to, answer, correct }: HistoryItemProps) => {
+const HistoryItem = ({
+  from,
+  to,
+  answer,
+  correct,
+  isDarkMode,
+}: HistoryItemProps) => {
   return (
-    <div className="flex h-[54px] items-center justify-between rounded-[14px] border border-slate-200 bg-white px-4">
-      <p className="text-[16px] font-extrabold text-slate-950">
+    <div
+      className={`flex h-[54px] items-center justify-between rounded-[14px] border border-slate-200 ${isDarkMode ? "bg-slate-800" : "bg-white"} px-4`}
+    >
+      <p
+        className={`text-[16px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
+      >
         {from} → {to}
       </p>
 
