@@ -24,14 +24,14 @@ export const App = () => {
 
   return (
     <main
-      className={`min-h-screen p-5 text-slate-900 transition ${
+      className={`h-screen overflow-hidden p-5 text-slate-900 transition ${
         isDarkMode ? "bg-slate-950" : "bg-[#f4f7fb]"
       }`}
     >
-      <div className="mx-auto w-[80%] h-[770px] ">
+      <div className="mx-auto flex h-full max-w-[1800px] flex-col">
         <Header isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />
 
-        <section className="flex mt-5 gap-5 h-[90%]">
+        <section className="mt-5 grid min-h-0 flex-1 grid-cols-[310px_minmax(560px,1fr)_340px] gap-5">
           <Sidebar
             isDarkMode={isDarkMode}
             selectedDifficulty={selectedDifficulty}

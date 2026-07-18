@@ -67,7 +67,7 @@ export const Sidebar = ({
 }: SidebarProps) => {
   return (
     <aside
-      className={`w-[30%] h-full overflow-y-auto rounded-[24px] border p-5 shadow-sm transition ${
+      className={`min-h-0 h-full overflow-y-auto rounded-[24px] border p-5 shadow-sm transition ${
         isDarkMode
           ? "border-slate-700 bg-slate-900"
           : "border-slate-200 bg-white"

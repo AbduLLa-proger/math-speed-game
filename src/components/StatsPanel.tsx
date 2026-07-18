@@ -58,7 +58,11 @@ const history = [
 export const StatsPanel = ({ isDarkMode }: { isDarkMode: boolean }) => {
   return (
     <aside
-      className={`w-[30%] overflow-auto rounded-[24px] border shadow-sm flex flex-col justify-between h-full ${isDarkMode ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white"}`}
+      className={`min-h-0 h-full overflow-y-auto rounded-[24px] border shadow-sm flex flex-col justify-between ${
+        isDarkMode
+          ? "border-slate-700 bg-slate-900"
+          : "border-slate-200 bg-white"
+      }`}
     >
       <div className="p-6">
         <div className="flex items-start gap-3">

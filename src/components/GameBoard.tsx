@@ -3,7 +3,11 @@ import { Clock3 } from "lucide-react";
 export const GameBoard = ({ isDarkMode }: { isDarkMode: boolean }) => {
   return (
     <section
-      className={`w-[40%] overflow-auto rounded-[24px] border p-7 shadow-sm flex flex-col justify-between ${isDarkMode ? "border-slate-700 bg-slate-900" : "border-slate-200 bg-white"}`}
+      className={`min-h-0 h-full overflow-y-auto rounded-[24px] border p-7 shadow-sm flex flex-col justify-between ${
+        isDarkMode
+          ? "border-slate-700 bg-slate-900"
+          : "border-slate-200 bg-white"
+      }`}
     >
       <div className="mb-7 flex items-start justify-between">
         <div>
