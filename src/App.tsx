@@ -49,7 +49,36 @@ export const App = () => {
     setPreviousNumber(startNumber);
     setCurrentNumber(nextNumber);
     setRound(1);
+    setUserAnswer("");
     setIsGameStarted(true);
+  };
+
+  const handleSubmitAnswer = () => {
+    if (!isGameStarted || userAnswer.trim() === "") return;
+
+    const parsedAnswer = Number(userAnswer);
+
+    if (!Number.isFinite(parsedAnswer)) return;
+
+    const correctAnswer = currentNumber - previousNumber;
+    const isCorrect = parsedAnswer === correctAnswer;
+
+    console.log({ userAnswer: parsedAnswer, correctAnswer, isCorrect });
+
+    if (round >= 10) {
+      setIsGameStarted(false);
+      setUserAnswer("");
+      return;
+    }
+
+    const nextPreviousNumber = currentNumber;
+    const change = generateChange(selectedDifficulty, selectedMode);
+    const nextCurrentNumber = nextPreviousNumber + change;
+
+    setPreviousNumber(nextPreviousNumber);
+    setCurrentNumber(nextCurrentNumber);
+    setRound((previousRound) => previousRound + 1);
+    setUserAnswer("");
   };
 
   const handleToggleTheme = () => {

@@ -1,5 +1,7 @@
 import { Clock3 } from "lucide-react";
 
+const IS_NUMBER = /^-?\d*$/;
+
 interface IGameBoard {
   isDarkMode: boolean;
   previousNumber: number;
@@ -8,7 +10,7 @@ interface IGameBoard {
   totalRounds: number;
   isGameStarted: boolean;
   userAnswer: string;
-  onAnswerChange: React.Dispatch<React.SetStateAction<string>>;
+  onAnswerChange: (value: string) => void;
   onSubmitAnswer: () => void;
 }
 
@@ -19,6 +21,9 @@ export const GameBoard = ({
   round,
   totalRounds,
   isGameStarted,
+  userAnswer,
+  onAnswerChange,
+  onSubmitAnswer,
 }: IGameBoard) => {
   return (
     <section
@@ -102,8 +107,17 @@ export const GameBoard = ({
           id="answer"
           type="number"
           inputMode="numeric"
+          value={userAnswer}
           disabled={!isGameStarted}
           placeholder={isGameStarted ? `Например -8` : "Сначала начни игру"}
+          onChange={(event) => {
+            const value = event.target.value;
+
+            if (IS_NUMBER.test(value)) onAnswerChange(value);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") onSubmitAnswer();
+          }}
           className={`h-[78px] w-full rounded-[16px] border-2 focus:outline-none focus:ring-0 focus:border-transparent ${isDarkMode ? "border-blue-600 bg-slate-800 text-white placeholder:text-slate-500" : "border-blue-600 bg-white text-slate-950 placeholder:text-slate-300"} px-6 text-[26px] font-semibold outline-none transition focus:border-blue-700 focus:ring-4 focus:ring-blue-100`}
         />
       </div>
