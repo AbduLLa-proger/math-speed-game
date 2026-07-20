@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Header } from "./components/Header";
 import { GameBoard } from "./components/GameBoard";
-import { StatsPanel } from "./components/StatsPanel";
+import { StatsPanel, type GameHistoryItem } from "./components/StatsPanel";
 import {
   Sidebar,
   type DifficultyKey,
   type ModeKey,
+  type GameType,
 } from "./components/Sidebar";
 
 const difficultyRanges: Record<DifficultyKey, number> = {
@@ -14,6 +15,8 @@ const difficultyRanges: Record<DifficultyKey, number> = {
   hard: 49,
   expert: 99,
 };
+
+type AnswerStatus = "idle" | "correct" | "incorrect";
 
 const generateChange = (difficulty: DifficultyKey, mode: ModeKey): number => {
   const maxChange = difficultyRanges[difficulty];
@@ -31,10 +34,20 @@ export const App = () => {
   const [selectedMode, setSelectedMode] = useState<ModeKey>("mixed");
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const [selectedGameType, setSelectedGameType] =
+    useState<GameType>("practice");
+  const [answerStatus, setAnswerStatus] = useState<AnswerStatus>("idle");
+
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [totalAttempts, setTotalAttempts] = useState(0);
+  const [isGameOver, setIsGameOver] = useState(false);
+
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
-  const [mistake, setMistake] = useState(0);
   const [streak, setStreak] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
+  const [mistakes, setMistakes] = useState(0);
+  const [history, setHistory] = useState<GameHistoryItem[]>([]);
 
   const [previousNumber, setPreviousNumber] = useState(0);
   const [currentNumber, setCurrentNumber] = useState(0);
@@ -51,6 +64,21 @@ export const App = () => {
     setRound(1);
     setUserAnswer("");
     setIsGameStarted(true);
+    setScore(0);
+    setStreak(0);
+    setCorrectAnswers(0);
+    setMistakes(0);
+    setHistory([]);
+    setAnswerStatus("idle");
+    setFeedbackMessage("");
+    setTotalAttempts(0);
+    setIsGameOver(false);
+  };
+
+  const handleAnswerChange = (value: string) => {
+    setUserAnswer(value);
+    setAnswerStatus("idle");
+    setFeedbackMessage("");
   };
 
   const handleSubmitAnswer = () => {
@@ -63,11 +91,43 @@ export const App = () => {
     const correctAnswer = currentNumber - previousNumber;
     const isCorrect = parsedAnswer === correctAnswer;
 
-    console.log({ userAnswer: parsedAnswer, correctAnswer, isCorrect });
+    const historyItem: GameHistoryItem = {
+      from: previousNumber,
+      to: currentNumber,
+      answer: parsedAnswer,
+      correct: isCorrect,
+    };
+
+    setTotalAttempts((previousValue) => previousValue + 1);
+    setHistory((previousHistory) => [historyItem, ...previousHistory]);
+    setUserAnswer("");
+
+    if (!isCorrect) {
+      setMistakes((previousValue) => previousValue + 1);
+      setStreak(0);
+      setAnswerStatus("incorrect");
+
+      if (selectedGameType === "practice") {
+        setFeedbackMessage("Неверно. Попробуй еще раз.");
+        return;
+      }
+      setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
+      setIsGameStarted(false);
+      setIsGameOver(true);
+
+      return;
+    }
+
+    setAnswerStatus("correct");
+    setFeedbackMessage("Верно! +100 очков");
+    setScore((previousScore) => previousScore + 100);
+    setCorrectAnswers((previousValue) => previousValue + 1);
+    setStreak((previousStreak) => previousStreak + 1);
 
     if (round >= 10) {
       setIsGameStarted(false);
-      setUserAnswer("");
+      setIsGameOver(true);
+      setFeedbackMessage("Игра завершена!");
       return;
     }
 
@@ -78,7 +138,6 @@ export const App = () => {
     setPreviousNumber(nextPreviousNumber);
     setCurrentNumber(nextCurrentNumber);
     setRound((previousRound) => previousRound + 1);
-    setUserAnswer("");
   };
 
   const handleToggleTheme = () => {
@@ -87,26 +146,28 @@ export const App = () => {
 
   return (
     <main
-      className={`content-center min-h-screen overflow-y-auto overflow-hidden p-5 text-slate-900 transition xl:overflow-hidden xl:p-5 ${
+      className={`content-center min-h-dvh xl:h-dvh p-5 text-slate-900 transition xl:overflow-hidden xl:p-5 ${
         isDarkMode ? "bg-slate-950" : "bg-[#f4f7fb]"
       }`}
     >
-      <div className="mx-auto flex min-h-full max-w-[1800px] flex-col">
+      <div className="mx-auto flex min-h-full max-w-[1800px] flex-col xl:h-full">
         <Header isDarkMode={isDarkMode} onToggleTheme={handleToggleTheme} />
 
-        <section className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[300px_minmax(0,1fr)] xl:min-h-0 xl:flex-1 xl:grid-cols-[310px_minmax(560px,1fr)_340px]">
+        <section className="game-layout mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[300px_minmax(0,1fr)] xl:min-h-0 xl:flex-1 xl:grid-cols-[310px_minmax(560px,1fr)_340px]">
           <div className="order-2 min-h-0 lg:order-1">
             <Sidebar
               isDarkMode={isDarkMode}
               selectedDifficulty={selectedDifficulty}
               selectedMode={selectedMode}
+              selectedGameType={selectedGameType}
               onDifficultyChange={setSelectedDifficulty}
               onModeChange={setSelectedMode}
+              onGameTypeChange={setSelectedGameType}
               onStartGame={handleStartGame}
             />
           </div>
 
-          <div className="order-1 min-h-0 lg:order-2">
+          <div className="order-1 min-h-0 lg:order-2 xl:order-2 xl:h-full">
             <GameBoard
               isDarkMode={isDarkMode}
               previousNumber={previousNumber}
@@ -115,13 +176,23 @@ export const App = () => {
               totalRounds={10}
               isGameStarted={isGameStarted}
               userAnswer={userAnswer}
-              onAnswerChange={setUserAnswer}
+              onAnswerChange={handleAnswerChange}
               onSubmitAnswer={handleSubmitAnswer}
+              answerStatus={answerStatus}
+              feedbackMessage={feedbackMessage}
+              isGameOver={isGameOver}
             />
           </div>
 
-          <div className="order-3 min-h-0 lg:col-span-2 xl:col-span-1">
-            <StatsPanel isDarkMode={isDarkMode} />
+          <div className="order-3 min-h-0 lg:col-span-2 xl:col-span-1 xl:h-full">
+            <StatsPanel
+              isDarkMode={isDarkMode}
+              score={score}
+              streak={streak}
+              correctAnswers={correctAnswers}
+              mistakes={mistakes}
+              history={history}
+            />
           </div>
         </section>
       </div>

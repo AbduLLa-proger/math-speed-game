@@ -30,3 +30,9 @@ input[type="number"] {
 button {
   cursor: pointer;
 }
+
+@media (min-width: 1280) and (min-height: 910px) {
+  .game-layout {
+    min-height: 760px;
+  }
+}

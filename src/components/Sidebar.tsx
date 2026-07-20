@@ -2,11 +2,14 @@ import { Minus, Play, Plus, Shuffle, TrendingUp } from "lucide-react";
 
 export type DifficultyKey = "easy" | "medium" | "hard" | "expert";
 export type ModeKey = "plus" | "minus" | "mixed";
+export type GameType = "practice" | "survival";
 
 type SidebarProps = {
   isDarkMode: boolean;
   selectedDifficulty: DifficultyKey;
   selectedMode: ModeKey;
+  selectedGameType: GameType;
+  onGameTypeChange: (gameType: GameType) => void;
   onDifficultyChange: (difficulty: DifficultyKey) => void;
   onModeChange: (mode: ModeKey) => void;
   onStartGame: () => void;
@@ -61,8 +64,10 @@ export const Sidebar = ({
   isDarkMode,
   selectedDifficulty,
   selectedMode,
+  selectedGameType,
   onDifficultyChange,
   onModeChange,
+  onGameTypeChange,
   onStartGame,
 }: SidebarProps) => {
   return (
@@ -377,6 +382,88 @@ export const Sidebar = ({
               </span>
             </button>
           </div>
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <div>
+          <h2
+            className={`text-[18px] font-extrabold ${
+              isDarkMode ? "text-white" : "text-slate-950"
+            }`}
+          >
+            Тип игры
+          </h2>
+
+          <p
+            className={`mt-1 text-[14px] leading-6 ${
+              isDarkMode ? "text-slate-400" : "text-slate-500"
+            }`}
+          >
+            Выбери правила завершения игры
+          </p>
+        </div>
+
+        <div className="mt-5 space-y-3">
+          <button
+            type="button"
+            onClick={() => onGameTypeChange("practice")}
+            className={`w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
+              selectedGameType === "practice"
+                ? isDarkMode
+                  ? "border-blue-500 bg-blue-950/40"
+                  : "border-blue-400 bg-blue-50"
+                : isDarkMode
+                  ? "border-slate-700 bg-slate-800 hover:border-blue-500"
+                  : "border-slate-200 bg-white hover:border-blue-200"
+            }`}
+          >
+            <p
+              className={`font-extrabold ${
+                isDarkMode ? "text-white" : "text-slate-950"
+              }`}
+            >
+              Тренировка
+            </p>
+
+            <p
+              className={`mt-1 text-[13px] ${
+                isDarkMode ? "text-slate-400" : "text-slate-500"
+              }`}
+            >
+              Ошибки разрешены, можно попробовать ещё раз
+            </p>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onGameTypeChange("survival")}
+            className={`w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
+              selectedGameType === "survival"
+                ? isDarkMode
+                  ? "border-red-500 bg-red-950/30"
+                  : "border-red-400 bg-red-50"
+                : isDarkMode
+                  ? "border-slate-700 bg-slate-800 hover:border-red-500"
+                  : "border-slate-200 bg-white hover:border-red-200"
+            }`}
+          >
+            <p
+              className={`font-extrabold ${
+                isDarkMode ? "text-white" : "text-slate-950"
+              }`}
+            >
+              До первой ошибки
+            </p>
+
+            <p
+              className={`mt-1 text-[13px] ${
+                isDarkMode ? "text-slate-400" : "text-slate-500"
+              }`}
+            >
+              Первый неправильный ответ завершает игру
+            </p>
+          </button>
         </div>
       </section>
 

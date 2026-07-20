@@ -7,55 +7,57 @@ import {
   XCircle,
 } from "lucide-react";
 
-const stats = [
-  {
-    title: "Очки",
-    value: "3200",
-    icon: Star,
-    iconClassName: "fill-blue-600 text-blue-600",
-  },
-  {
-    title: "Серия",
-    value: "3",
-    icon: Flame,
-    iconClassName: "fill-green-500 text-green-500",
-  },
-  {
-    title: "Верно",
-    value: "8",
-    icon: CheckCircle2,
-    iconClassName: "fill-green-500 text-white",
-  },
-  {
-    title: "Ошибки",
-    value: "2",
-    icon: XCircle,
-    iconClassName: "fill-red-500 text-white",
-  },
-];
+export type GameHistoryItem = {
+  from: number;
+  to: number;
+  answer: number;
+  correct: boolean;
+};
 
-const history = [
-  {
-    from: "0",
-    to: "7",
-    answer: "+7",
-    correct: true,
-  },
-  {
-    from: "7",
-    to: "-1",
-    answer: "-8",
-    correct: true,
-  },
-  {
-    from: "-1",
-    to: "5",
-    answer: "+6",
-    correct: false,
-  },
-];
+type StatsPanelProps = {
+  isDarkMode: boolean;
+  score: number;
+  streak: number;
+  correctAnswers: number;
+  mistakes: number;
+  history: GameHistoryItem[];
+};
 
-export const StatsPanel = ({ isDarkMode }: { isDarkMode: boolean }) => {
+export const StatsPanel = ({
+  isDarkMode,
+  score,
+  streak,
+  correctAnswers,
+  mistakes,
+  history,
+}: StatsPanelProps) => {
+  const stats = [
+    {
+      title: "Очки",
+      value: String(score),
+      icon: Star,
+      iconClassName: "fill-blue-600 text-blue-600",
+    },
+    {
+      title: "Серия",
+      value: String(streak),
+      icon: Flame,
+      iconClassName: "fill-green-500 text-green-500",
+    },
+    {
+      title: "Верно",
+      value: String(correctAnswers),
+      icon: CheckCircle2,
+      iconClassName: "fill-green-500 text-white",
+    },
+    {
+      title: "Ошибки",
+      value: String(mistakes),
+      icon: XCircle,
+      iconClassName: "fill-red-500 text-white",
+    },
+  ];
+
   return (
     <aside
       className={`min-h-0 h-full overflow-y-auto rounded-[24px] border shadow-sm flex flex-col justify-between ${
@@ -169,16 +171,26 @@ export const StatsPanel = ({ isDarkMode }: { isDarkMode: boolean }) => {
         </div>
 
         <div className="mt-5 space-y-3">
-          {history.map((item) => (
-            <HistoryItem
-              key={`${item.from}-${item.to}-${item.answer}`}
-              from={item.from}
-              to={item.to}
-              answer={item.answer}
-              correct={item.correct}
-              isDarkMode={isDarkMode}
-            />
-          ))}
+          {history.length === 0 ? (
+            <p
+              className={`text-[14px] ${isDarkMode ? "text-slate-400" : "text-slate-500"}`}
+            >
+              Ответов пока нет
+            </p>
+          ) : (
+            history
+              .slice(0, 3)
+              .map((item, index) => (
+                <HistoryItem
+                  key={`${item.from}-${item.to}-${index}`}
+                  from={String(item.from)}
+                  to={String(item.to)}
+                  answer={`${item.answer > 0 ? "+" : ""}${item.answer}`}
+                  correct={item.correct}
+                  isDarkMode={isDarkMode}
+                />
+              ))
+          )}
         </div>
 
         <button
