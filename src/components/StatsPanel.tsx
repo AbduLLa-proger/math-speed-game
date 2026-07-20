@@ -60,7 +60,7 @@ export const StatsPanel = ({
 
   return (
     <aside
-      className={`min-h-0 h-full overflow-y-auto rounded-[24px] border shadow-sm flex flex-col justify-between ${
+      className={`custom-scrollbar min-h-0 h-full overflow-y-auto rounded-[24px] border shadow-sm flex flex-col justify-between ${
         isDarkMode
           ? "border-slate-700 bg-slate-900"
           : "border-slate-200 bg-white"
@@ -98,13 +98,13 @@ export const StatsPanel = ({
             return (
               <div
                 key={item.title}
-                className={`rounded-[16px] border ${isDarkMode ? "border-slate-600 bg-slate-800" : "border-slate-200 bg-white"} p-5`}
+                className={`rounded-[16px] border ${isDarkMode ? "border-slate-600 bg-slate-800" : "border-slate-200 bg-white"} p-3.5`}
               >
                 <div className="flex items-center gap-3">
                   <Icon
                     size={24}
                     strokeWidth={2.4}
-                    className={item.iconClassName}
+                    className={`${item.iconClassName} shrink-0`}
                   />
 
                   <p
@@ -115,7 +115,7 @@ export const StatsPanel = ({
                 </div>
 
                 <p
-                  className={`mt-4 text-[26px] font-black leading-none ${isDarkMode ? "text-white" : "text-slate-950"}`}
+                  className={`ml-1 mt-4 text-[26px] font-black leading-none ${isDarkMode ? "text-white" : "text-slate-950"}`}
                 >
                   {item.value}
                 </p>
