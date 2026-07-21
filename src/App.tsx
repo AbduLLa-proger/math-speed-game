@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "./components/Header";
 import { GameBoard } from "./components/GameBoard";
+import { GameResult } from "./components/GameResult";
 import { StatsPanel, type GameHistoryItem } from "./components/StatsPanel";
 import {
   Sidebar,
@@ -42,6 +43,11 @@ export const App = () => {
   const [totalAttempts, setTotalAttempts] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
 
+  const [finalUserAnswer, setFinalUserAnswer] = useState<number | null>(null);
+  const [finalCorrectAnswer, setFinalCorrectAnswer] = useState<number | null>(
+    null,
+  );
+
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -73,10 +79,23 @@ export const App = () => {
     setFeedbackMessage("");
     setTotalAttempts(0);
     setIsGameOver(false);
+    setFinalUserAnswer(null);
+    setFinalCorrectAnswer(null);
   };
 
   const handleAnswerChange = (value: string) => {
     setUserAnswer(value);
+    setAnswerStatus("idle");
+    setFeedbackMessage("");
+  };
+
+  const handleBackToSettings = () => {
+    setIsGameStarted(false);
+    setIsGameOver(false);
+    setPreviousNumber(0);
+    setCurrentNumber(0);
+    setRound(0);
+    setUserAnswer("");
     setAnswerStatus("idle");
     setFeedbackMessage("");
   };
@@ -109,6 +128,14 @@ export const App = () => {
 
       if (selectedGameType === "practice") {
         setFeedbackMessage("Неверно. Попробуй еще раз.");
+        return;
+      } else if (selectedGameType === "survival") {
+        setFinalUserAnswer(parsedAnswer);
+        setFinalCorrectAnswer(correctAnswer);
+        setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
+        setIsGameStarted(false);
+        setIsGameOver(true);
+
         return;
       }
       setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
@@ -167,7 +194,7 @@ export const App = () => {
             />
           </div>
 
-          <div className="order-1 min-h-0 lg:order-2 xl:order-2 xl:h-full">
+          {/* <div className="order-1 min-h-0 lg:order-2 xl:order-2 xl:h-full">
             <GameBoard
               isDarkMode={isDarkMode}
               previousNumber={previousNumber}
@@ -182,6 +209,40 @@ export const App = () => {
               feedbackMessage={feedbackMessage}
               isGameOver={isGameOver}
             />
+          </div> */}
+
+          <div className="order-1 min-h-0 lg:order-2 xl:order-2 xl:h-full">
+            {isGameOver ? (
+              <GameBoard
+                isDarkMode={isDarkMode}
+                gameType={selectedGameType}
+                score={score}
+                correctAnswers={correctAnswers}
+                mistakes={mistakes}
+                totalAttempts={totalAttempts}
+                completedRounds={correctAnswers}
+                totalRounds={10}
+                finalUserAnswer={finalUserAnswer}
+                finalCorrectAnswer={finalCorrectAnswer}
+                onPlayAgain={handleStartGame}
+                onBackToSettings={handleBackToSettings}
+              />
+            ) : (
+              <GameBoard
+                isDarkMode={isDarkMode}
+                previousNumber={previousNumber}
+                currentNumber={currentNumber}
+                round={round}
+                totalRounds={10}
+                isGameStarted={isGameStarted}
+                userAnswer={userAnswer}
+                onAnswerChange={handleAnswerChange}
+                onSubmitAnswer={handleSubmitAnswer}
+                answerStatus={answerStatus}
+                feedbackMessage={feedbackMessage}
+                isGameOver={isGameOver}
+              />
+            )}
           </div>
 
           <div className="order-3 min-h-0 lg:col-span-2 xl:col-span-1 xl:h-full">

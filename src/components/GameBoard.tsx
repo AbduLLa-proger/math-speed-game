@@ -4,27 +4,47 @@ const IS_NUMBER = /^-?\d*$/;
 
 interface IGameBoard {
   isDarkMode: boolean;
-  previousNumber: number;
-  currentNumber: number;
-  round: number;
+  gameType?: string;
+  score?: number;
+  correctAnswers?: number;
+  mistakes?: number;
+  totalAttempts?: number;
+  completedRounds?: number;
+  previousNumber?: number;
+  currentNumber?: number;
+  round?: number;
   totalRounds: number;
-  isGameStarted: boolean;
-  userAnswer: string;
-  onAnswerChange: (value: string) => void;
-  onSubmitAnswer: () => void;
-  answerStatus: string;
-  feedbackMessage: string;
-  isGameOver: boolean;
+  finalUserAnswer?: number | null;
+  finalCorrectAnswer?: number | null;
+  onPlayAgain?: () => void;
+  onBackToSettings?: () => void;
+  isGameStarted?: boolean;
+  userAnswer?: string;
+  onAnswerChange?: (value: string) => void;
+  onSubmitAnswer?: () => void;
+  answerStatus?: string;
+  feedbackMessage?: string;
+  isGameOver?: boolean;
 }
 
 export const GameBoard = ({
   isDarkMode,
+  gameType,
+  score,
+  correctAnswers,
+  mistakes,
+  totalAttempts,
+  completedRounds,
+  finalUserAnswer,
+  finalCorrectAnswer,
   previousNumber,
   currentNumber,
   round,
   totalRounds,
   isGameStarted,
   userAnswer,
+  onPlayAgain,
+  onBackToSettings,
   onAnswerChange,
   onSubmitAnswer,
   answerStatus,
@@ -46,7 +66,7 @@ export const GameBoard = ({
           >
             Раунд{" "}
             <span
-              className={`text-blue-600 ml-3 ${isDarkMode ? "text-white" : "text-slate-950"}`}
+              className={`ml-3 ${isDarkMode ? "text-white" : "text-slate-950"}`}
             >
               {round} / {totalRounds}
             </span>
@@ -75,12 +95,6 @@ export const GameBoard = ({
       <div
         className={`flex h-[285px] flex-col items-center justify-center rounded-[20px] ${isDarkMode ? "bg-slate-800" : "bg-slate-50"}`}
       >
-        {/* <p
-          className={`text-[18px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
-        >
-          {isGameStarted ? currentNumber : 0}
-        </p> */}
-
         <p
           className={`mt-8 text-[118px] font-black leading-none ${isDarkMode ? "text-white" : "text-slate-950"}`}
         >
@@ -119,10 +133,10 @@ export const GameBoard = ({
           onChange={(event) => {
             const value = event.target.value;
 
-            if (IS_NUMBER.test(value)) onAnswerChange(value);
+            if (IS_NUMBER.test(value)) onAnswerChange?.(value);
           }}
           onKeyDown={(event) => {
-            if (event.key === "Enter") onSubmitAnswer();
+            if (event.key === "Enter") onSubmitAnswer?.();
           }}
           className={`h-[78px] w-full rounded-[16px] border-2 focus:outline-none focus:ring-0 focus:border-transparent ${isDarkMode ? "border-blue-600 bg-slate-800 text-white placeholder:text-slate-500" : "border-blue-600 bg-white text-slate-950 placeholder:text-slate-300"} px-6 text-[26px] font-semibold outline-none transition focus:border-blue-700 focus:ring-4 focus:ring-blue-100`}
         />
@@ -156,7 +170,7 @@ type NumberCardProps = {
 const NumberCard = ({ label, value, isDarkMode }: NumberCardProps) => {
   return (
     <div
-      className={`flex h-[140px] flex-col items-center justify-center rounded-[18px] border border-slate-200 ${isDarkMode ? "bg-slate-800 text-white" : "bg-white text-slate-950"}`}
+      className={`flex h-[140px] flex-col items-center justify-center rounded-[18px] border ${isDarkMode ? "bg-slate-800 text-white border-slate-600" : "bg-white text-slate-950 border-slate-200"}`}
     >
       <p
         className={`text-[16px] font-extrabold ${isDarkMode ? "text-white" : "text-slate-950"}`}
