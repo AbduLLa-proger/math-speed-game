@@ -6,6 +6,7 @@ export type GameType = "practice" | "survival";
 
 type SidebarProps = {
   isDarkMode: boolean;
+  isSettingsLocked: boolean;
   selectedDifficulty: DifficultyKey;
   selectedMode: ModeKey;
   selectedGameType: GameType;
@@ -62,6 +63,7 @@ const modes = [
 
 export const Sidebar = ({
   isDarkMode,
+  isSettingsLocked,
   selectedDifficulty,
   selectedMode,
   selectedGameType,
@@ -112,7 +114,8 @@ export const Sidebar = ({
             key={difficulties[0].key}
             type="button"
             onClick={() => onDifficultyChange(difficulties[0].key)}
-            className={`w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            disabled={isSettingsLocked}
+            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[0].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -151,7 +154,8 @@ export const Sidebar = ({
             key={difficulties[1].key}
             type="button"
             onClick={() => onDifficultyChange(difficulties[1].key)}
-            className={`w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            disabled={isSettingsLocked}
+            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[1].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -190,7 +194,8 @@ export const Sidebar = ({
             key={difficulties[2].key}
             type="button"
             onClick={() => onDifficultyChange(difficulties[2].key)}
-            className={`w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            disabled={isSettingsLocked}
+            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[2].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -229,7 +234,8 @@ export const Sidebar = ({
             key={difficulties[3].key}
             type="button"
             onClick={() => onDifficultyChange(difficulties[3].key)}
-            className={`w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            disabled={isSettingsLocked}
+            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[3].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -299,7 +305,8 @@ export const Sidebar = ({
               key={modes[0].key}
               type="button"
               onClick={() => onModeChange(modes[0].key)}
-              className={`flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
+              disabled={isSettingsLocked}
+              className={`disabled:cursor-not-allowed disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
                 selectedMode === modes[0].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
@@ -328,7 +335,8 @@ export const Sidebar = ({
               key={modes[1].key}
               type="button"
               onClick={() => onModeChange(modes[1].key)}
-              className={`flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
+              disabled={isSettingsLocked}
+              className={`disabled:cursor-not-allowed disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
                 selectedMode === modes[1].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
@@ -357,7 +365,8 @@ export const Sidebar = ({
               key={modes[2].key}
               type="button"
               onClick={() => onModeChange(modes[2].key)}
-              className={`flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
+              disabled={isSettingsLocked}
+              className={`disabled:cursor-not-allowed disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
                 selectedMode === modes[2].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
@@ -408,7 +417,8 @@ export const Sidebar = ({
           <button
             type="button"
             onClick={() => onGameTypeChange("practice")}
-            className={`w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
+            disabled={isSettingsLocked}
+            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
               selectedGameType === "practice"
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -438,7 +448,8 @@ export const Sidebar = ({
           <button
             type="button"
             onClick={() => onGameTypeChange("survival")}
-            className={`w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
+            disabled={isSettingsLocked}
+            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
               selectedGameType === "survival"
                 ? isDarkMode
                   ? "border-red-500 bg-red-950/30"
@@ -470,10 +481,11 @@ export const Sidebar = ({
       <button
         type="button"
         onClick={onStartGame}
+        disabled={isSettingsLocked}
         className="mt-6 flex h-[64px] w-full cursor-pointer items-center justify-center gap-3 rounded-[18px] bg-blue-600 text-[17px] font-extrabold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
       >
         <Play size={20} className="fill-white text-white" strokeWidth={2.4} />
-        Начать игру
+        {isSettingsLocked ? "Игра запущена" : "Начать игру"}
       </button>
     </aside>
   );

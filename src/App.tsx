@@ -255,6 +255,8 @@ export const App = () => {
       ? `${bestResults.practiceAccuracy}%`
       : `${bestResults.survivalRounds} / 10`;
 
+  const isSettingsLocked = isGameStarted || isGameOver;
+
   return (
     <main
       className={`content-center min-h-dvh xl:h-dvh p-5 text-slate-900 transition xl:overflow-hidden xl:p-5 ${
@@ -272,6 +274,7 @@ export const App = () => {
           <div className="order-2 min-h-0 lg:order-1">
             <Sidebar
               isDarkMode={isDarkMode}
+              isSettingsLocked={isSettingsLocked}
               selectedDifficulty={selectedDifficulty}
               selectedMode={selectedMode}
               selectedGameType={selectedGameType}
