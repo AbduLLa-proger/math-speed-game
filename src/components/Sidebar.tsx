@@ -100,7 +100,7 @@ export const Sidebar = ({
                 isDarkMode ? "text-slate-400" : "text-slate-500"
               }`}
             >
-              Выбери уровень сложности
+              Выберите уровень сложности
               <br />
               для игры
             </p>
@@ -284,7 +284,7 @@ export const Sidebar = ({
                 isDarkMode ? "text-slate-400" : "text-slate-500"
               }`}
             >
-              Выбери режим игры
+              Выберите режим игры
             </p>
           </div>
         </div>
@@ -400,7 +400,7 @@ export const Sidebar = ({
               isDarkMode ? "text-slate-400" : "text-slate-500"
             }`}
           >
-            Выбери правила завершения игры
+            Выберите правила завершения игры
           </p>
         </div>
 

@@ -10,9 +10,14 @@ import {
 type HeaderProps = {
   isDarkMode: boolean;
   onToggleTheme: () => void;
+  bestResult: string;
 };
 
-export const Header = ({ isDarkMode, onToggleTheme }: HeaderProps) => {
+export const Header = ({
+  isDarkMode,
+  bestResult,
+  onToggleTheme,
+}: HeaderProps) => {
   return (
     <header
       className={`flex min-h-[90px] flex-col gap-4 rounded-[22px] border p-4 shadow-sm transition md:flex-row md:items-center md:justify-between lg:px-6 ${
@@ -77,7 +82,7 @@ export const Header = ({ isDarkMode, onToggleTheme }: HeaderProps) => {
                 isDarkMode ? "text-white" : "text-slate-950"
               }`}
             >
-              9 / 10
+              {bestResult}
             </p>
           </div>
         </div>

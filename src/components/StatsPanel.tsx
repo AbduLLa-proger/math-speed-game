@@ -6,6 +6,7 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
+import type { GameType } from "./Sidebar";
 
 export type GameHistoryItem = {
   from: number;
@@ -16,19 +17,24 @@ export type GameHistoryItem = {
 
 type StatsPanelProps = {
   isDarkMode: boolean;
+  gameType: GameType;
   score: number;
+  bestResult: string;
   streak: number;
   correctAnswers: number;
   mistakes: number;
+  accuracy: number;
   history: GameHistoryItem[];
 };
 
 export const StatsPanel = ({
   isDarkMode,
+  gameType,
   score,
   streak,
   correctAnswers,
   mistakes,
+  accuracy,
   history,
 }: StatsPanelProps) => {
   const stats = [
@@ -39,10 +45,13 @@ export const StatsPanel = ({
       iconClassName: "fill-blue-600 text-blue-600",
     },
     {
-      title: "Серия",
-      value: String(streak),
+      title: gameType === "practice" ? "Точность" : "Серия",
+      value: gameType === "practice" ? `${accuracy}%` : String(streak),
       icon: Flame,
-      iconClassName: "fill-green-500 text-green-500",
+      iconClassName:
+        gameType === "practice"
+          ? "text-violet-500"
+          : "fill-green-500 text-green-500",
     },
     {
       title: "Верно",

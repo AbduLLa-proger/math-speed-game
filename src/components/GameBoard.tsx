@@ -4,52 +4,30 @@ const IS_NUMBER = /^-?\d*$/;
 
 interface IGameBoard {
   isDarkMode: boolean;
-  gameType?: string;
-  score?: number;
-  correctAnswers?: number;
-  mistakes?: number;
-  totalAttempts?: number;
-  completedRounds?: number;
-  previousNumber?: number;
-  currentNumber?: number;
-  round?: number;
+  previousNumber: number;
+  currentNumber: number;
+  round: number;
   totalRounds: number;
-  finalUserAnswer?: number | null;
-  finalCorrectAnswer?: number | null;
-  onPlayAgain?: () => void;
-  onBackToSettings?: () => void;
-  isGameStarted?: boolean;
-  userAnswer?: string;
+  isGameStarted: boolean;
+  userAnswer: string;
   onAnswerChange?: (value: string) => void;
   onSubmitAnswer?: () => void;
   answerStatus?: string;
   feedbackMessage?: string;
-  isGameOver?: boolean;
 }
 
 export const GameBoard = ({
   isDarkMode,
-  gameType,
-  score,
-  correctAnswers,
-  mistakes,
-  totalAttempts,
-  completedRounds,
-  finalUserAnswer,
-  finalCorrectAnswer,
   previousNumber,
   currentNumber,
   round,
   totalRounds,
   isGameStarted,
   userAnswer,
-  onPlayAgain,
-  onBackToSettings,
   onAnswerChange,
   onSubmitAnswer,
   answerStatus,
   feedbackMessage,
-  isGameOver,
 }: IGameBoard) => {
   return (
     <section
@@ -105,12 +83,12 @@ export const GameBoard = ({
       <div className="mt-5 grid grid-cols-2 gap-5">
         <NumberCard
           label="Было"
-          value={String(previousNumber)}
+          value={String(previousNumber ?? 0)}
           isDarkMode={isDarkMode}
         />
         <NumberCard
           label="Стало"
-          value={String(currentNumber)}
+          value={String(currentNumber ?? 0)}
           isDarkMode={isDarkMode}
         />
       </div>
