@@ -31,6 +31,10 @@ button {
   cursor: pointer;
 }
 
+.disabled-element:disabled:hover {
+  cursor: not-allowed;
+}
+
 @media (min-width: 1280) and (min-height: 910px) {
   .game-layout {
     min-height: 760px;

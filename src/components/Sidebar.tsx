@@ -115,14 +115,14 @@ export const Sidebar = ({
             type="button"
             onClick={() => onDifficultyChange(difficulties[0].key)}
             disabled={isSettingsLocked}
-            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[0].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
                   : "border-blue-400 bg-blue-50/50"
                 : isDarkMode
-                  ? "border-slate-700 bg-slate-800 hover:border-blue-500 hover:bg-slate-800/80"
-                  : "border-slate-200 bg-white hover:border-blue-200 hover:bg-slate-50"
+                  ? "border-slate-700 bg-slate-800 hover:border-blue-500 hover:bg-slate-800/80 disabled-element"
+                  : "border-slate-200 bg-white hover:border-blue-200 hover:bg-slate-50 disabled-element"
             }`}
           >
             <div className="flex items-center gap-4">
@@ -155,7 +155,7 @@ export const Sidebar = ({
             type="button"
             onClick={() => onDifficultyChange(difficulties[1].key)}
             disabled={isSettingsLocked}
-            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[1].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -195,7 +195,7 @@ export const Sidebar = ({
             type="button"
             onClick={() => onDifficultyChange(difficulties[2].key)}
             disabled={isSettingsLocked}
-            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[2].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -235,7 +235,7 @@ export const Sidebar = ({
             type="button"
             onClick={() => onDifficultyChange(difficulties[3].key)}
             disabled={isSettingsLocked}
-            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
+            className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
               selectedDifficulty === difficulties[3].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -306,7 +306,7 @@ export const Sidebar = ({
               type="button"
               onClick={() => onModeChange(modes[0].key)}
               disabled={isSettingsLocked}
-              className={`disabled:cursor-not-allowed disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
+              className={`disabled-element disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
                 selectedMode === modes[0].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
@@ -336,7 +336,7 @@ export const Sidebar = ({
               type="button"
               onClick={() => onModeChange(modes[1].key)}
               disabled={isSettingsLocked}
-              className={`disabled:cursor-not-allowed disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
+              className={`disabled-element disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
                 selectedMode === modes[1].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
@@ -366,7 +366,7 @@ export const Sidebar = ({
               type="button"
               onClick={() => onModeChange(modes[2].key)}
               disabled={isSettingsLocked}
-              className={`disabled:cursor-not-allowed disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
+              className={`disabled-element disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
                 selectedMode === modes[2].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
@@ -418,7 +418,7 @@ export const Sidebar = ({
             type="button"
             onClick={() => onGameTypeChange("practice")}
             disabled={isSettingsLocked}
-            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
+            className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
               selectedGameType === "practice"
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
@@ -449,7 +449,7 @@ export const Sidebar = ({
             type="button"
             onClick={() => onGameTypeChange("survival")}
             disabled={isSettingsLocked}
-            className={`disabled:cursor-not-allowed disabled:opacity-50 w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
+            className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[16px] border p-4 text-left transition ${
               selectedGameType === "survival"
                 ? isDarkMode
                   ? "border-red-500 bg-red-950/30"

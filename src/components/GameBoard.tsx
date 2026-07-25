@@ -14,6 +14,7 @@ interface IGameBoard {
   onSubmitAnswer?: () => void;
   answerStatus?: string;
   feedbackMessage?: string;
+  time: string;
 }
 
 export const GameBoard = ({
@@ -28,6 +29,7 @@ export const GameBoard = ({
   onSubmitAnswer,
   answerStatus,
   feedbackMessage,
+  time,
 }: IGameBoard) => {
   return (
     <section
@@ -65,7 +67,7 @@ export const GameBoard = ({
           <span
             className={`text-[30px] font-black leading-none ${isDarkMode ? "text-white" : "text-slate-950"}`}
           >
-            00:42
+            {time}
           </span>
         </div>
       </div>

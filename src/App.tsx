@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { GameBoard } from "./components/GameBoard";
 import { GameResult } from "./components/GameResult";
@@ -60,11 +60,21 @@ const generateChange = (difficulty: DifficultyKey, mode: ModeKey): number => {
   return Math.random() > 0.5 ? value : -value;
 };
 
+const formatTime = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+  return `${String(minutes).padStart(2, "0")}:${String(
+    remainingSeconds,
+  ).padStart(2, "0")}`;
+};
+
 export const App = () => {
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyKey>("easy");
   const [selectedMode, setSelectedMode] = useState<ModeKey>("mixed");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   const [selectedGameType, setSelectedGameType] =
     useState<GameType>("practice");
@@ -104,6 +114,7 @@ export const App = () => {
     setActiveGameType(activeGameType);
     setPreviousNumber(startNumber);
     setCurrentNumber(nextNumber);
+    setElapsedSeconds(0)
     setRound(1);
     setUserAnswer("");
     setIsGameStarted(true);
@@ -257,6 +268,22 @@ export const App = () => {
 
   const isSettingsLocked = isGameStarted || isGameOver;
 
+  const formattedTime = formatTime(elapsedSeconds);
+
+  useEffect(() => {
+  if (!isGameStarted) {
+    return;
+  }
+
+  const intervalId = window.setInterval(() => {
+    setElapsedSeconds((previousSeconds) => previousSeconds + 1);
+  }, 1000);
+
+  return () => {
+    window.clearInterval(intervalId);
+  };
+}, [isGameStarted]);
+
   return (
     <main
       className={`content-center min-h-dvh xl:h-dvh p-5 text-slate-900 transition xl:overflow-hidden xl:p-5 ${
@@ -304,6 +331,7 @@ export const App = () => {
             ) : (
               <GameBoard
                 isDarkMode={isDarkMode}
+                time={formattedTime}
                 previousNumber={previousNumber}
                 currentNumber={currentNumber}
                 round={round}
