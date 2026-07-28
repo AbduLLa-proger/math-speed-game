@@ -1,7 +1,5 @@
 import { Clock3 } from "lucide-react";
 
-const IS_NUMBER = /^-?\d*$/;
-
 interface IGameBoard {
   isDarkMode: boolean;
   previousNumber: number;
@@ -112,8 +110,7 @@ export const GameBoard = ({
           placeholder={isGameStarted ? `Например -8` : "Сначала начни игру"}
           onChange={(event) => {
             const value = event.target.value;
-
-            if (IS_NUMBER.test(value)) onAnswerChange?.(value);
+            onAnswerChange?.(value);
           }}
           onKeyDown={(event) => {
             if (event.key === "Enter") onSubmitAnswer?.();

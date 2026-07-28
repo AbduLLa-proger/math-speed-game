@@ -78,21 +78,14 @@ export const App = () => {
 
   const [selectedGameType, setSelectedGameType] =
     useState<GameType>("practice");
-  const [activeGameType, setActiveGameType] = useState<GameType>("practice");
   const [bestResults, setBestResults] = useState<BestResults>(
     getInitialBestResults,
   );
   const [answerStatus, setAnswerStatus] = useState<AnswerStatus>("idle");
-  const [accuracy, setAccuracy] = useState(0);
 
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [totalAttempts, setTotalAttempts] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
-
-  const [finalUserAnswer, setFinalUserAnswer] = useState<number | null>(null);
-  const [finalCorrectAnswer, setFinalCorrectAnswer] = useState<number | null>(
-    null,
-  );
 
   const [userAnswer, setUserAnswer] = useState("");
   const [score, setScore] = useState(0);
@@ -111,10 +104,9 @@ export const App = () => {
     const change = generateChange(selectedDifficulty, selectedMode);
     const nextNumber = startNumber + change;
 
-    setActiveGameType(activeGameType);
     setPreviousNumber(startNumber);
     setCurrentNumber(nextNumber);
-    setElapsedSeconds(0)
+    setElapsedSeconds(0);
     setRound(1);
     setUserAnswer("");
     setIsGameStarted(true);
@@ -127,8 +119,6 @@ export const App = () => {
     setFeedbackMessage("");
     setTotalAttempts(0);
     setIsGameOver(false);
-    setFinalUserAnswer(null);
-    setFinalCorrectAnswer(null);
   };
 
   const handleAnswerChange = (value: string) => {
@@ -148,28 +138,33 @@ export const App = () => {
     setFeedbackMessage("");
   };
 
-  const saveBestResults = () => {
+  const saveBestResults = (
+    gameType: GameType,
+    finalAccuracy: number,
+    finalCorrectAnswer: number,
+  ) => {
     setBestResults((previousResults) => {
-      const nextResults =
-        activeGameType === "practice"
+      const nextResults: BestResults =
+        gameType === "practice"
           ? {
               ...previousResults,
               practiceAccuracy: Math.max(
                 previousResults.practiceAccuracy,
-                accuracy,
+                finalAccuracy,
               ),
             }
           : {
               ...previousResults,
               survivalRounds: Math.max(
                 previousResults.survivalRounds,
-                correctAnswers,
+                finalCorrectAnswer,
               ),
             };
 
       try {
         localStorage.setItem(BEST_RESULTS_KEY, JSON.stringify(nextResults));
       } catch {
+        console.error("Не удалось сохранить лучший результат");
         // Игра продолжит работать, даже если localStorage недоступен.
       }
 
@@ -207,18 +202,15 @@ export const App = () => {
         setFeedbackMessage("Неверно. Попробуй еще раз.");
         return;
       } else if (selectedGameType === "survival") {
+        setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
+        setIsGameStarted(false);
+        setIsGameOver(true);
         const accuracy =
           totalAttempts === 0
             ? 0
             : Math.round((correctAnswers / totalAttempts) * 100);
-        setAccuracy(accuracy);
-        setFinalUserAnswer(parsedAnswer);
-        setFinalCorrectAnswer(correctAnswer);
-        setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
-        setIsGameStarted(false);
-        setIsGameOver(true);
 
-        saveBestResults();
+        saveBestResults(selectedGameType, accuracy, totalAttempts);
 
         return;
       }
@@ -226,7 +218,7 @@ export const App = () => {
       setIsGameStarted(false);
       setIsGameOver(true);
 
-      saveBestResults();
+      saveBestResults(selectedGameType, accuracy, totalAttempts);
 
       return;
     }
@@ -240,7 +232,8 @@ export const App = () => {
     if (round >= 10) {
       setIsGameStarted(false);
       setIsGameOver(true);
-      saveBestResults();
+      saveBestResults(selectedGameType, accuracy, totalAttempts);
+
       setFeedbackMessage("Игра завершена!");
       return;
     }
@@ -258,31 +251,31 @@ export const App = () => {
     setIsDarkMode((prev) => !prev);
   };
 
-  const displayedGameType =
-    isGameStarted || isGameOver ? activeGameType : selectedGameType;
-
   const bestResult =
-    displayedGameType === "practice"
+    selectedGameType === "practice"
       ? `${bestResults.practiceAccuracy}%`
       : `${bestResults.survivalRounds} / 10`;
-
   const isSettingsLocked = isGameStarted || isGameOver;
-
   const formattedTime = formatTime(elapsedSeconds);
+  const finalAttempt = history[0] ?? null;
+  const accuracy =
+    totalAttempts === 0
+      ? 0
+      : Math.round((correctAnswers / totalAttempts) * 100);
 
   useEffect(() => {
-  if (!isGameStarted) {
-    return;
-  }
+    if (!isGameStarted) {
+      return;
+    }
 
-  const intervalId = window.setInterval(() => {
-    setElapsedSeconds((previousSeconds) => previousSeconds + 1);
-  }, 1000);
+    const intervalId = window.setInterval(() => {
+      setElapsedSeconds((previousSeconds) => previousSeconds + 1);
+    }, 1000);
 
-  return () => {
-    window.clearInterval(intervalId);
-  };
-}, [isGameStarted]);
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isGameStarted]);
 
   return (
     <main
@@ -323,8 +316,10 @@ export const App = () => {
                 totalAttempts={totalAttempts}
                 completedRounds={correctAnswers}
                 totalRounds={10}
-                finalUserAnswer={finalUserAnswer}
-                finalCorrectAnswer={finalCorrectAnswer}
+                finalUserAnswer={finalAttempt.answer ?? null}
+                finalCorrectAnswer={
+                  finalAttempt ? finalAttempt.to - finalAttempt.from : null
+                }
                 onPlayAgain={handleStartGame}
                 onBackToSettings={handleBackToSettings}
               />
