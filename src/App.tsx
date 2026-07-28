@@ -182,6 +182,12 @@ export const App = () => {
     const correctAnswer = currentNumber - previousNumber;
     const isCorrect = parsedAnswer === correctAnswer;
 
+    const nextTotalAttempts = totalAttempts + 1;
+    const nextCorrectAnswers = correctAnswers + (isCorrect ? 1 : 0);
+    const nextAccuracy = Math.round(
+      (nextCorrectAnswers / nextTotalAttempts) * 100,
+    );
+
     const historyItem: GameHistoryItem = {
       from: previousNumber,
       to: currentNumber,
@@ -218,7 +224,7 @@ export const App = () => {
       setIsGameStarted(false);
       setIsGameOver(true);
 
-      saveBestResults(selectedGameType, accuracy, totalAttempts);
+      saveBestResults(selectedGameType, nextAccuracy, nextCorrectAnswers);
 
       return;
     }
@@ -232,7 +238,7 @@ export const App = () => {
     if (round >= 10) {
       setIsGameStarted(false);
       setIsGameOver(true);
-      saveBestResults(selectedGameType, accuracy, totalAttempts);
+      saveBestResults(selectedGameType, nextAccuracy, nextCorrectAnswers);
 
       setFeedbackMessage("Игра завершена!");
       return;
@@ -316,7 +322,7 @@ export const App = () => {
                 totalAttempts={totalAttempts}
                 completedRounds={correctAnswers}
                 totalRounds={10}
-                finalUserAnswer={finalAttempt.answer ?? null}
+                finalUserAnswer={finalAttempt?.answer ?? null}
                 finalCorrectAnswer={
                   finalAttempt ? finalAttempt.to - finalAttempt.from : null
                 }
