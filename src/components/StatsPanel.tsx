@@ -25,17 +25,20 @@ type StatsPanelProps = {
   mistakes: number;
   accuracy: number;
   history: GameHistoryItem[];
+  onOpenHistory: () => void;
 };
 
 export const StatsPanel = ({
   isDarkMode,
   gameType,
   score,
+  bestResult,
   streak,
   correctAnswers,
   mistakes,
   accuracy,
   history,
+  onOpenHistory,
 }: StatsPanelProps) => {
   const stats = [
     {
@@ -154,7 +157,7 @@ export const StatsPanel = ({
             <p
               className={`mt-2 text-[30px] font-black leading-none ${isDarkMode ? "text-white" : "text-slate-950"}`}
             >
-              9 / 10
+              {bestResult}
             </p>
 
             <p
@@ -204,7 +207,8 @@ export const StatsPanel = ({
 
         <button
           type="button"
-          className={`mt-5 h-[52px] w-full rounded-[14px] border text-[15px] font-extrabold transition ${isDarkMode ? "border-blue-700 bg-slate-800 text-white hover:bg-slate-700" : "border-blue-300 bg-white text-blue-600 hover:bg-blue-50"}`}
+          onClick={onOpenHistory}
+          className={`mt-5 h-[52px] w-full cursor-pointer rounded-[14px] border text-[15px] font-extrabold transition ${isDarkMode ? "border-blue-700 bg-slate-800 text-white hover:bg-slate-700" : "border-blue-300 bg-white text-blue-600 hover:bg-blue-50"}`}
         >
           Посмотреть всю историю
         </button>

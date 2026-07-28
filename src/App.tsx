@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "./components/Header";
 import { GameBoard } from "./components/GameBoard";
 import { GameResult } from "./components/GameResult";
+import { HistoryModal } from "./components/HistoryModal";
 import { StatsPanel, type GameHistoryItem } from "./components/StatsPanel";
 import {
   Sidebar,
@@ -75,6 +76,7 @@ export const App = () => {
   const [selectedMode, setSelectedMode] = useState<ModeKey>("mixed");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const [selectedGameType, setSelectedGameType] =
     useState<GameType>("practice");
@@ -358,10 +360,18 @@ export const App = () => {
               mistakes={mistakes}
               accuracy={accuracy}
               history={history}
+              onOpenHistory={() => setIsHistoryOpen(true)}
             />
           </div>
         </section>
       </div>
+      {isHistoryOpen && (
+        <HistoryModal
+          isDarkMode={isDarkMode}
+          history={history}
+          onClose={() => setIsHistoryOpen(false)}
+        />
+      )}
     </main>
   );
 };
