@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BrainCircuit,
   ChevronDown,
@@ -5,19 +6,40 @@ import {
   Sun,
   Trophy,
   UserRound,
+  Check,
 } from "lucide-react";
 
 type HeaderProps = {
   isDarkMode: boolean;
-  onToggleTheme: () => void;
   bestResult: string;
+  playerName: string;
+  onToggleTheme: () => void;
+  onPlayerNameChange: (name: string) => void;
 };
 
 export const Header = ({
   isDarkMode,
   bestResult,
+  playerName,
   onToggleTheme,
+  onPlayerNameChange,
 }: HeaderProps) => {
+  const [isPlayerMenuOpen, setIsPlayerMenuOpen] = useState(false);
+  const [draftPlayerName, setDraftPlayerName] = useState(playerName);
+
+  const handleTogglePlayerMenu = () => {
+    setDraftPlayerName(playerName);
+    setIsPlayerMenuOpen((previousValue) => !previousValue);
+  };
+
+  const handleSavePlayerName = () => {
+    const trimmedName = draftPlayerName.trim();
+
+    if (!trimmedName) return;
+
+    onPlayerNameChange(trimmedName);
+    setIsPlayerMenuOpen(false);
+  };
   return (
     <header
       className={`flex min-h-[90px] flex-col gap-4 rounded-[22px] border p-4 shadow-sm transition md:flex-row md:items-center md:justify-between lg:px-6 ${
@@ -89,6 +111,8 @@ export const Header = ({
 
         <button
           type="button"
+          onClick={handleTogglePlayerMenu}
+          aria-expanded={isPlayerMenuOpen}
           className={`flex h-[54px] shrink-0 cursor-pointer items-center gap-3 rounded-2xl border px-3 transition lg:h-[58px] lg:gap-4 lg:px-5 ${
             isDarkMode
               ? "border-slate-700 bg-slate-800 hover:bg-slate-700"
@@ -100,19 +124,66 @@ export const Header = ({
           </div>
 
           <span
-            className={`hidden text-[15px] font-bold sm:inline lg:text-[17px] ${
+            className={`hidden max-w-[130px] truncate text-[15px] font-bold sm:inline lg:text-[17px] ${
               isDarkMode ? "text-white" : "text-slate-900"
             }`}
           >
-            Игрок
+            {playerName}
           </span>
 
           <ChevronDown
             size={18}
-            className={isDarkMode ? "text-slate-300" : "text-slate-600"}
+            className={`transition ${
+              isPlayerMenuOpen ? "rotate-180" : ""
+            } ${isDarkMode ? "text-slate-300" : "text-slate-600"}`}
             strokeWidth={2.2}
           />
         </button>
+
+        {isPlayerMenuOpen && (
+          <div
+            className={`absolute right-57 top-[100px] z-40 w-[280px] rounded-[18px] border p-4 shadow-xl ${
+              isDarkMode
+                ? "border-slate-700 bg-slate-900"
+                : "border-slate-200 bg-white"
+            }`}
+          >
+            <p
+              className={`text-sm font-bold ${
+                isDarkMode ? "text-slate-300" : "text-slate-600"
+              }`}
+            >
+              Имя игрока
+            </p>
+
+            <input
+              type="text"
+              value={draftPlayerName}
+              maxLength={20}
+              onChange={(event) => setDraftPlayerName(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleSavePlayerName();
+                }
+              }}
+              className={`mt-3 h-12 w-full rounded-[12px] border px-4 font-semibold outline-none transition focus:border-blue-500 ${
+                isDarkMode
+                  ? "border-slate-600 bg-slate-800 text-white"
+                  : "border-slate-200 bg-white text-slate-950"
+              }`}
+            />
+
+            <button
+              type="button"
+              onClick={handleSavePlayerName}
+              disabled={!draftPlayerName.trim()}
+              className="mt-3 flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-[12px] bg-blue-600 font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Check size={18} />
+              Сохранить
+            </button>
+          </div>
+        )}
 
         <button
           type="button"

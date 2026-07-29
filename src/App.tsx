@@ -24,7 +24,17 @@ type BestResults = {
 };
 type AnswerStatus = "idle" | "correct" | "incorrect";
 
+const PLAYER_NAME_KEY = "math-speed-player-name";
+
 const BEST_RESULTS_KEY = "math-speed-best-results";
+
+const getInitialPlayerName = (): string => {
+  try {
+    return localStorage.getItem(PLAYER_NAME_KEY) || "Игрок";
+  } catch {
+    return "Игрок";
+  }
+};
 
 const getInitialBestResults = (): BestResults => {
   try {
@@ -77,6 +87,7 @@ export const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [playerName, setPlayerName] = useState(getInitialPlayerName);
 
   const [selectedGameType, setSelectedGameType] =
     useState<GameType>("practice");
@@ -121,6 +132,20 @@ export const App = () => {
     setFeedbackMessage("");
     setTotalAttempts(0);
     setIsGameOver(false);
+  };
+
+  const handlePlayerNameChange = (name: string) => {
+    const trimmedName = name.trim();
+
+    if (!trimmedName) return;
+
+    setPlayerName(trimmedName);
+
+    try {
+      localStorage.setItem(PLAYER_NAME_KEY, trimmedName);
+    } catch {
+      console.error("Не удалось сохранить имя игрока");
+    }
   };
 
   const handleAnswerChange = (value: string) => {
@@ -296,6 +321,8 @@ export const App = () => {
           isDarkMode={isDarkMode}
           bestResult={bestResult}
           onToggleTheme={handleToggleTheme}
+          playerName={playerName}
+          onPlayerNameChange={handlePlayerNameChange}
         />
 
         <section className="game-layout mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[300px_minmax(0,1fr)] xl:min-h-0 xl:flex-1 xl:grid-cols-[310px_minmax(560px,1fr)_340px]">
