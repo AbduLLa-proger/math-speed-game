@@ -6,27 +6,7 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
-import type { GameType } from "./Sidebar";
-
-export type GameHistoryItem = {
-  from: number;
-  to: number;
-  answer: number;
-  correct: boolean;
-};
-
-type StatsPanelProps = {
-  isDarkMode: boolean;
-  gameType: GameType;
-  score: number;
-  bestResult: string;
-  streak: number;
-  correctAnswers: number;
-  mistakes: number;
-  accuracy: number;
-  history: GameHistoryItem[];
-  onOpenHistory: () => void;
-};
+import { type StatsPanelProps, type HistoryItemProps } from "../types/game";
 
 export const StatsPanel = ({
   isDarkMode,
@@ -215,14 +195,6 @@ export const StatsPanel = ({
       </div>
     </aside>
   );
-};
-
-type HistoryItemProps = {
-  from: string;
-  to: string;
-  answer: string;
-  correct: boolean;
-  isDarkMode: boolean;
 };
 
 const HistoryItem = ({

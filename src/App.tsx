@@ -3,82 +3,24 @@ import { Header } from "./components/Header";
 import { GameBoard } from "./components/GameBoard";
 import { GameResult } from "./components/GameResult";
 import { HistoryModal } from "./components/HistoryModal";
-import { StatsPanel, type GameHistoryItem } from "./components/StatsPanel";
+import { StatsPanel } from "./components/StatsPanel";
+import { Sidebar } from "./components/Sidebar.tsx";
 import {
-  Sidebar,
+  getInitialPlayerName,
+  getInitialBestResults,
+  generateChange,
+  PLAYER_NAME_KEY,
+  BEST_RESULTS_KEY,
+  formatTime,
+} from "./utils/game.ts";
+import {
+  type GameHistoryItem,
   type DifficultyKey,
   type ModeKey,
   type GameType,
-} from "./components/Sidebar";
-
-const difficultyRanges: Record<DifficultyKey, number> = {
-  easy: 9,
-  medium: 19,
-  hard: 49,
-  expert: 99,
-};
-
-type BestResults = {
-  practiceAccuracy: number;
-  survivalRounds: number;
-};
-type AnswerStatus = "idle" | "correct" | "incorrect";
-
-const PLAYER_NAME_KEY = "math-speed-player-name";
-
-const BEST_RESULTS_KEY = "math-speed-best-results";
-
-const getInitialPlayerName = (): string => {
-  try {
-    return localStorage.getItem(PLAYER_NAME_KEY) || "Игрок";
-  } catch {
-    return "Игрок";
-  }
-};
-
-const getInitialBestResults = (): BestResults => {
-  try {
-    const savedResults = localStorage.getItem(BEST_RESULTS_KEY);
-
-    if (!savedResults) {
-      return {
-        practiceAccuracy: 0,
-        survivalRounds: 0,
-      };
-    }
-
-    const parsedResults = JSON.parse(savedResults) as Partial<BestResults>;
-
-    return {
-      practiceAccuracy: parsedResults.practiceAccuracy ?? 0,
-      survivalRounds: parsedResults.survivalRounds ?? 0,
-    };
-  } catch {
-    return {
-      practiceAccuracy: 0,
-      survivalRounds: 0,
-    };
-  }
-};
-
-const generateChange = (difficulty: DifficultyKey, mode: ModeKey): number => {
-  const maxChange = difficultyRanges[difficulty];
-  const value = Math.floor(Math.random() * maxChange) + 1;
-
-  if (mode === "plus") return value;
-  else if (mode === "minus") return -value;
-
-  return Math.random() > 0.5 ? value : -value;
-};
-
-const formatTime = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  return `${String(minutes).padStart(2, "0")}:${String(
-    remainingSeconds,
-  ).padStart(2, "0")}`;
-};
+  type AnswerStatus,
+  type BestResults,
+} from "./types/game.ts";
 
 export const App = () => {
   const [selectedDifficulty, setSelectedDifficulty] =
@@ -357,6 +299,7 @@ export const App = () => {
                 }
                 onPlayAgain={handleStartGame}
                 onBackToSettings={handleBackToSettings}
+                time={formattedTime}
               />
             ) : (
               <GameBoard

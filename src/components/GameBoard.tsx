@@ -1,19 +1,5 @@
 import { Clock3 } from "lucide-react";
-
-interface IGameBoard {
-  isDarkMode: boolean;
-  previousNumber: number;
-  currentNumber: number;
-  round: number;
-  totalRounds: number;
-  isGameStarted: boolean;
-  userAnswer: string;
-  onAnswerChange?: (value: string) => void;
-  onSubmitAnswer?: () => void;
-  answerStatus?: string;
-  feedbackMessage?: string;
-  time: string;
-}
+import { type IGameBoard, type NumberCardProps } from "../types/game";
 
 export const GameBoard = ({
   isDarkMode,
@@ -136,12 +122,6 @@ export const GameBoard = ({
       </div>
     </section>
   );
-};
-
-type NumberCardProps = {
-  label: string;
-  value: string;
-  isDarkMode: boolean;
 };
 
 const NumberCard = ({ label, value, isDarkMode }: NumberCardProps) => {

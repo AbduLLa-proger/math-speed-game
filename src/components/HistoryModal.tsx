@@ -1,11 +1,5 @@
 import { CheckCircle2, X, XCircle } from "lucide-react";
-import type { GameHistoryItem } from "./StatsPanel";
-
-type HistoryModalProps = {
-  isDarkMode: boolean;
-  history: GameHistoryItem[];
-  onClose: () => void;
-};
+import { type HistoryModalProps } from "../types/game";
 
 export const HistoryModal = ({
   isDarkMode,

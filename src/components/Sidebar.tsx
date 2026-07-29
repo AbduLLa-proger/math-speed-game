@@ -1,65 +1,6 @@
 import { Minus, Play, Plus, Shuffle, TrendingUp } from "lucide-react";
-
-export type DifficultyKey = "easy" | "medium" | "hard" | "expert";
-export type ModeKey = "plus" | "minus" | "mixed";
-export type GameType = "practice" | "survival";
-
-type SidebarProps = {
-  isDarkMode: boolean;
-  isSettingsLocked: boolean;
-  selectedDifficulty: DifficultyKey;
-  selectedMode: ModeKey;
-  selectedGameType: GameType;
-  onGameTypeChange: (gameType: GameType) => void;
-  onDifficultyChange: (difficulty: DifficultyKey) => void;
-  onModeChange: (mode: ModeKey) => void;
-  onStartGame: () => void;
-};
-
-const difficulties = [
-  {
-    key: "easy" as DifficultyKey,
-    title: "Легко",
-    description: "Числа от -9 до +9",
-    dotClassName: "bg-green-500",
-  },
-  {
-    key: "medium" as DifficultyKey,
-    title: "Средне",
-    description: "Числа от -20 до +20",
-    dotClassName: "bg-blue-500",
-  },
-  {
-    key: "hard" as DifficultyKey,
-    title: "Сложно",
-    description: "Числа от -50 до +50",
-    dotClassName: "bg-amber-500",
-  },
-  {
-    key: "expert" as DifficultyKey,
-    title: "Эксперт",
-    description: "Числа от -100 до +100",
-    dotClassName: "bg-red-500",
-  },
-];
-
-const modes = [
-  {
-    key: "plus" as ModeKey,
-    title: "Только сложение",
-    iconClassName: "text-green-500",
-  },
-  {
-    key: "minus" as ModeKey,
-    title: "Только вычитание",
-    iconClassName: "text-blue-500",
-  },
-  {
-    key: "mixed" as ModeKey,
-    title: "Смешанный режим",
-    iconClassName: "text-violet-500",
-  },
-];
+import { type SidebarProps } from "../types/game";
+import { difficulties, modes } from "../utils/game";
 
 export const Sidebar = ({
   isDarkMode,

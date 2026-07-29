@@ -1,20 +1,5 @@
 import { RotateCcw, Settings2, Trophy } from "lucide-react";
-import type { GameType } from "./Sidebar";
-
-type GameResultProps = {
-  isDarkMode: boolean;
-  gameType: GameType;
-  score: number;
-  correctAnswers: number;
-  mistakes: number;
-  totalAttempts: number;
-  completedRounds: number;
-  totalRounds: number;
-  finalUserAnswer: number | null;
-  finalCorrectAnswer: number | null;
-  onPlayAgain: () => void;
-  onBackToSettings: () => void;
-};
+import { type GameResultProps, type ResultCardProps } from "../types/game";
 
 export const GameResult = ({
   isDarkMode,
@@ -27,6 +12,7 @@ export const GameResult = ({
   totalRounds,
   finalUserAnswer,
   finalCorrectAnswer,
+  time,
   onPlayAgain,
   onBackToSettings,
 }: GameResultProps) => {
@@ -94,7 +80,7 @@ export const GameResult = ({
           </p>
         </div>
 
-        <div className="mt-7 grid w-full grid-cols-2 gap-4 xl:grid-cols-4">
+        <div className="mt-7 grid w-full grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">
           <ResultCard
             label="Очки"
             value={String(score)}
@@ -118,6 +104,8 @@ export const GameResult = ({
             value={`${accuracy}%`}
             isDarkMode={isDarkMode}
           />
+
+          <ResultCard label="Время" value={time} isDarkMode={isDarkMode} />
         </div>
 
         {isSurvival && mistakes > 0 && (
@@ -194,12 +182,6 @@ export const GameResult = ({
       </div>
     </section>
   );
-};
-
-type ResultCardProps = {
-  label: string;
-  value: string;
-  isDarkMode: boolean;
 };
 
 const ResultCard = ({ label, value, isDarkMode }: ResultCardProps) => {

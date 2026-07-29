@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { type HeaderProps } from "../types/game";
 import {
   BrainCircuit,
   ChevronDown,
@@ -8,14 +9,6 @@ import {
   UserRound,
   Check,
 } from "lucide-react";
-
-type HeaderProps = {
-  isDarkMode: boolean;
-  bestResult: string;
-  playerName: string;
-  onToggleTheme: () => void;
-  onPlayerNameChange: (name: string) => void;
-};
 
 export const Header = ({
   isDarkMode,
