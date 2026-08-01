@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type HeaderProps } from "../types/game";
+import { type THeaderProps } from "../types/game";
 import {
   BrainCircuit,
   ChevronDown,
@@ -16,7 +16,7 @@ export const Header = ({
   playerName,
   onToggleTheme,
   onPlayerNameChange,
-}: HeaderProps) => {
+}: THeaderProps) => {
   const [isPlayerMenuOpen, setIsPlayerMenuOpen] = useState(false);
   const [draftPlayerName, setDraftPlayerName] = useState(playerName);
 

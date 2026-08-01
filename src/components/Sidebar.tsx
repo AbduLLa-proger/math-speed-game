@@ -1,6 +1,6 @@
 import { Minus, Play, Plus, Shuffle, TrendingUp } from "lucide-react";
-import { type SidebarProps } from "../types/game";
-import { difficulties, modes } from "../utils/game";
+import { type TSidebarProps } from "../types/game";
+import { DIFFICULTIES, MODES } from "../utils/game";
 
 export const Sidebar = ({
   isDarkMode,
@@ -8,11 +8,15 @@ export const Sidebar = ({
   selectedDifficulty,
   selectedMode,
   selectedGameType,
+  roundsMode,
+  selectedRounds,
   onDifficultyChange,
   onModeChange,
   onGameTypeChange,
+  onRoundsModeChange,
+  onSelectedRoundsChange,
   onStartGame,
-}: SidebarProps) => {
+}: TSidebarProps) => {
   return (
     <aside
       className={`custom-scrollbar min-h-0 h-full overflow-y-auto rounded-[24px] border p-5 shadow-sm transition ${
@@ -52,12 +56,12 @@ export const Sidebar = ({
 
         <div className="mt-6 space-y-3">
           <button
-            key={difficulties[0].key}
+            key={DIFFICULTIES[0].key}
             type="button"
-            onClick={() => onDifficultyChange(difficulties[0].key)}
+            onClick={() => onDifficultyChange(DIFFICULTIES[0].key)}
             disabled={isSettingsLocked}
             className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
-              selectedDifficulty === difficulties[0].key
+              selectedDifficulty === DIFFICULTIES[0].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
                   : "border-blue-400 bg-blue-50/50"
@@ -68,7 +72,7 @@ export const Sidebar = ({
           >
             <div className="flex items-center gap-4">
               <span
-                className={`h-5 w-5 rounded-full ${difficulties[0].dotClassName}`}
+                className={`h-5 w-5 rounded-full ${DIFFICULTIES[0].dotClassName}`}
               />
 
               <div>
@@ -77,7 +81,7 @@ export const Sidebar = ({
                     isDarkMode ? "text-white" : "text-slate-950"
                   }`}
                 >
-                  {difficulties[0].title}
+                  {DIFFICULTIES[0].title}
                 </p>
 
                 <p
@@ -85,19 +89,19 @@ export const Sidebar = ({
                     isDarkMode ? "text-slate-400" : "text-slate-500"
                   }`}
                 >
-                  {difficulties[0].description}
+                  {DIFFICULTIES[0].description}
                 </p>
               </div>
             </div>
           </button>
 
           <button
-            key={difficulties[1].key}
+            key={DIFFICULTIES[1].key}
             type="button"
-            onClick={() => onDifficultyChange(difficulties[1].key)}
+            onClick={() => onDifficultyChange(DIFFICULTIES[1].key)}
             disabled={isSettingsLocked}
             className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
-              selectedDifficulty === difficulties[1].key
+              selectedDifficulty === DIFFICULTIES[1].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
                   : "border-blue-400 bg-blue-50/50"
@@ -108,7 +112,7 @@ export const Sidebar = ({
           >
             <div className="flex items-center gap-4">
               <span
-                className={`h-5 w-5 rounded-full ${difficulties[1].dotClassName}`}
+                className={`h-5 w-5 rounded-full ${DIFFICULTIES[1].dotClassName}`}
               />
 
               <div>
@@ -117,7 +121,7 @@ export const Sidebar = ({
                     isDarkMode ? "text-white" : "text-slate-950"
                   }`}
                 >
-                  {difficulties[1].title}
+                  {DIFFICULTIES[1].title}
                 </p>
 
                 <p
@@ -125,19 +129,19 @@ export const Sidebar = ({
                     isDarkMode ? "text-slate-400" : "text-slate-500"
                   }`}
                 >
-                  {difficulties[1].description}
+                  {DIFFICULTIES[1].description}
                 </p>
               </div>
             </div>
           </button>
 
           <button
-            key={difficulties[2].key}
+            key={DIFFICULTIES[2].key}
             type="button"
-            onClick={() => onDifficultyChange(difficulties[2].key)}
+            onClick={() => onDifficultyChange(DIFFICULTIES[2].key)}
             disabled={isSettingsLocked}
             className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
-              selectedDifficulty === difficulties[2].key
+              selectedDifficulty === DIFFICULTIES[2].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
                   : "border-blue-400 bg-blue-50/50"
@@ -148,7 +152,7 @@ export const Sidebar = ({
           >
             <div className="flex items-center gap-4">
               <span
-                className={`h-5 w-5 rounded-full ${difficulties[2].dotClassName}`}
+                className={`h-5 w-5 rounded-full ${DIFFICULTIES[2].dotClassName}`}
               />
 
               <div>
@@ -157,7 +161,7 @@ export const Sidebar = ({
                     isDarkMode ? "text-white" : "text-slate-950"
                   }`}
                 >
-                  {difficulties[2].title}
+                  {DIFFICULTIES[2].title}
                 </p>
 
                 <p
@@ -165,19 +169,19 @@ export const Sidebar = ({
                     isDarkMode ? "text-slate-400" : "text-slate-500"
                   }`}
                 >
-                  {difficulties[2].description}
+                  {DIFFICULTIES[2].description}
                 </p>
               </div>
             </div>
           </button>
 
           <button
-            key={difficulties[3].key}
+            key={DIFFICULTIES[3].key}
             type="button"
-            onClick={() => onDifficultyChange(difficulties[3].key)}
+            onClick={() => onDifficultyChange(DIFFICULTIES[3].key)}
             disabled={isSettingsLocked}
             className={`disabled-element disabled:opacity-50 w-full cursor-pointer rounded-[18px] border px-4 py-4 text-left transition ${
-              selectedDifficulty === difficulties[3].key
+              selectedDifficulty === DIFFICULTIES[3].key
                 ? isDarkMode
                   ? "border-blue-500 bg-blue-950/40"
                   : "border-blue-400 bg-blue-50/50"
@@ -188,7 +192,7 @@ export const Sidebar = ({
           >
             <div className="flex items-center gap-4">
               <span
-                className={`h-5 w-5 rounded-full ${difficulties[3].dotClassName}`}
+                className={`h-5 w-5 rounded-full ${DIFFICULTIES[3].dotClassName}`}
               />
 
               <div>
@@ -197,7 +201,7 @@ export const Sidebar = ({
                     isDarkMode ? "text-white" : "text-slate-950"
                   }`}
                 >
-                  {difficulties[3].title}
+                  {DIFFICULTIES[3].title}
                 </p>
 
                 <p
@@ -205,7 +209,7 @@ export const Sidebar = ({
                     isDarkMode ? "text-slate-400" : "text-slate-500"
                   }`}
                 >
-                  {difficulties[3].description}
+                  {DIFFICULTIES[3].description}
                 </p>
               </div>
             </div>
@@ -243,12 +247,12 @@ export const Sidebar = ({
         >
           <div className="space-y-2">
             <button
-              key={modes[0].key}
+              key={MODES[0].key}
               type="button"
-              onClick={() => onModeChange(modes[0].key)}
+              onClick={() => onModeChange(MODES[0].key)}
               disabled={isSettingsLocked}
               className={`disabled-element disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
-                selectedMode === modes[0].key
+                selectedMode === MODES[0].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
                     : "bg-white shadow-sm ring-1 ring-blue-200"
@@ -259,7 +263,7 @@ export const Sidebar = ({
             >
               <Plus
                 size={22}
-                className={modes[0].iconClassName}
+                className={MODES[0].iconClassName}
                 strokeWidth={2.4}
               />
 
@@ -268,17 +272,17 @@ export const Sidebar = ({
                   isDarkMode ? "text-white" : "text-slate-700"
                 }`}
               >
-                {modes[0].title}
+                {MODES[0].title}
               </span>
             </button>
 
             <button
-              key={modes[1].key}
+              key={MODES[1].key}
               type="button"
-              onClick={() => onModeChange(modes[1].key)}
+              onClick={() => onModeChange(MODES[1].key)}
               disabled={isSettingsLocked}
               className={`disabled-element disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
-                selectedMode === modes[1].key
+                selectedMode === MODES[1].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
                     : "bg-white shadow-sm ring-1 ring-blue-200"
@@ -289,7 +293,7 @@ export const Sidebar = ({
             >
               <Minus
                 size={22}
-                className={modes[1].iconClassName}
+                className={MODES[1].iconClassName}
                 strokeWidth={2.4}
               />
 
@@ -298,17 +302,17 @@ export const Sidebar = ({
                   isDarkMode ? "text-white" : "text-slate-700"
                 }`}
               >
-                {modes[1].title}
+                {MODES[1].title}
               </span>
             </button>
 
             <button
-              key={modes[2].key}
+              key={MODES[2].key}
               type="button"
-              onClick={() => onModeChange(modes[2].key)}
+              onClick={() => onModeChange(MODES[2].key)}
               disabled={isSettingsLocked}
               className={`disabled-element disabled:opacity-50 flex w-full cursor-pointer items-center gap-4 rounded-[14px] px-4 py-4 text-left transition ${
-                selectedMode === modes[2].key
+                selectedMode === MODES[2].key
                   ? isDarkMode
                     ? "bg-slate-900 shadow-sm ring-1 ring-blue-500"
                     : "bg-white shadow-sm ring-1 ring-blue-200"
@@ -319,7 +323,7 @@ export const Sidebar = ({
             >
               <Shuffle
                 size={22}
-                className={modes[2].iconClassName}
+                className={MODES[2].iconClassName}
                 strokeWidth={2.4}
               />
 
@@ -328,7 +332,7 @@ export const Sidebar = ({
                   isDarkMode ? "text-white" : "text-slate-700"
                 }`}
               >
-                {modes[2].title}
+                {MODES[2].title}
               </span>
             </button>
           </div>
@@ -419,11 +423,118 @@ export const Sidebar = ({
         </div>
       </section>
 
+      <section className="mt-8">
+        <div>
+          <h2
+            className={`text-[18px] font-extrabold ${
+              isDarkMode ? "text-white" : "text-slate-950"
+            }`}
+          >
+            Количество раундов
+          </h2>
+
+          <p
+            className={`mt-1 text-[14px] leading-6 ${
+              isDarkMode ? "text-slate-400" : "text-slate-500"
+            }`}
+          >
+            Выберите количество или играйте без ограничений
+          </p>
+        </div>
+
+        <div className="mt-5 grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            disabled={isSettingsLocked}
+            onClick={() => onRoundsModeChange("fixed")}
+            className={`disabled-element cursor-pointer rounded-[14px] border p-3 font-bold transition disabled:opacity-50 ${
+              roundsMode === "fixed"
+                ? isDarkMode
+                  ? "border-blue-500 bg-blue-950/40 text-white"
+                  : "border-blue-400 bg-blue-50 text-blue-700"
+                : isDarkMode
+                  ? "border-slate-700 bg-slate-800 text-slate-300"
+                  : "border-slate-200 bg-white text-slate-700"
+            }`}
+          >
+            Раунды
+          </button>
+
+          <button
+            type="button"
+            disabled={isSettingsLocked}
+            onClick={() => onRoundsModeChange("infinite")}
+            className={`disabled-element cursor-pointer rounded-[14px] border p-3 font-bold transition disabled:opacity-50 ${
+              roundsMode === "infinite"
+                ? isDarkMode
+                  ? "border-violet-500 bg-violet-950/40 text-white"
+                  : "border-violet-400 bg-violet-50 text-violet-700"
+                : isDarkMode
+                  ? "border-slate-700 bg-slate-800 text-slate-300"
+                  : "border-slate-200 bg-white text-slate-700"
+            }`}
+          >
+            ∞ Бесконечно
+          </button>
+        </div>
+
+        {roundsMode === "fixed" && (
+          <>
+            <div className="mt-3 grid grid-cols-4 gap-2">
+              {[10, 20, 50, 100].map((rounds) => (
+                <button
+                  key={rounds}
+                  type="button"
+                  disabled={isSettingsLocked}
+                  onClick={() => onSelectedRoundsChange(rounds)}
+                  className={`disabled-element h-11 cursor-pointer rounded-[12px] border font-bold transition disabled:opacity-50 ${
+                    selectedRounds === rounds
+                      ? "border-blue-500 bg-blue-600 text-white"
+                      : isDarkMode
+                        ? "border-slate-700 bg-slate-800 text-white"
+                        : "border-slate-200 bg-white text-slate-700"
+                  }`}
+                >
+                  {rounds}
+                </button>
+              ))}
+            </div>
+
+            <input
+              type="number"
+              min={10}
+              disabled={isSettingsLocked}
+              value={selectedRounds || ""}
+              onChange={(event) =>
+                onSelectedRoundsChange(Number(event.target.value))
+              }
+              onBlur={() => {
+                if (selectedRounds < 10) {
+                  onSelectedRoundsChange(10);
+                }
+              }}
+              placeholder="Минимум 10"
+              className={`mt-3 h-12 w-full rounded-[12px] border px-4 font-semibold outline-none transition focus:border-blue-500 disabled:opacity-50 ${
+                isDarkMode
+                  ? "border-slate-700 bg-slate-800 text-white"
+                  : "border-slate-200 bg-white text-slate-950"
+              }`}
+            />
+          </>
+        )}
+      </section>
+
       <button
         type="button"
         onClick={onStartGame}
-        disabled={isSettingsLocked}
-        className="mt-6 flex h-[64px] w-full cursor-pointer items-center justify-center gap-3 rounded-[18px] bg-blue-600 text-[17px] font-extrabold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700"
+        disabled={
+          isSettingsLocked || (roundsMode === "fixed" && selectedRounds < 10)
+        }
+        className="mt-6 flex h-[64px] w-full items-center justify-center gap-3
+  rounded-[18px] bg-blue-600 text-[17px] font-extrabold text-white
+  shadow-lg shadow-blue-600/20 transition
+  enabled:cursor-pointer enabled:hover:bg-blue-700
+  disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Play size={20} className="fill-white text-white" strokeWidth={2.4} />
         {isSettingsLocked ? "Игра запущена" : "Начать игру"}

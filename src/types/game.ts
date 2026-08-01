@@ -1,34 +1,44 @@
 // App.tsx
-export type AnswerStatus = "idle" | "correct" | "incorrect";
-export type BestResults = {
+export type TAnswerStatus = "idle" | "correct" | "incorrect";
+export type TRoundsMode = "fixed" | "infinite";
+export type TFixedBestResult = {
   practiceAccuracy: number;
   survivalRounds: number;
+};
+export type TBestResults = {
+  fixed: Record<number, TFixedBestResult>;
+  infinite: {
+    practiceCorrectAnswers: number;
+    survivalRounds: number;
+  };
 };
 
 // GameBoard.tsx
 export interface IGameBoard {
   isDarkMode: boolean;
+  totalRounds: number | null;
+  canFinishGame: boolean;
+  onFinishGame: () => void;
+  time: string;
   previousNumber: number;
   currentNumber: number;
   round: number;
-  totalRounds: number;
   isGameStarted: boolean;
   userAnswer: string;
   onAnswerChange?: (value: string) => void;
   onSubmitAnswer?: () => void;
   answerStatus?: string;
   feedbackMessage?: string;
-  time: string;
 }
 
-export type NumberCardProps = {
+export type INumberCardProps = {
   label: string;
   value: string;
   isDarkMode: boolean;
 };
 
 // Header.tsx
-export type HeaderProps = {
+export type THeaderProps = {
   isDarkMode: boolean;
   bestResult: string;
   playerName: string;
@@ -37,38 +47,42 @@ export type HeaderProps = {
 };
 
 // History.tsx
-export type HistoryModalProps = {
+export type THistoryModalProps = {
   isDarkMode: boolean;
-  history: GameHistoryItem[];
+  history: TGameHistoryItem[];
   onClose: () => void;
 };
 
 // Sidebar.tsx
-export type DifficultyKey = "easy" | "medium" | "hard" | "expert";
-export type ModeKey = "plus" | "minus" | "mixed";
-export type GameType = "practice" | "survival";
+export type TDifficultyKey = "easy" | "medium" | "hard" | "expert";
+export type TModeKey = "plus" | "minus" | "mixed";
+export type TGameType = "practice" | "survival";
 
-export type SidebarProps = {
+export type TSidebarProps = {
   isDarkMode: boolean;
   isSettingsLocked: boolean;
-  selectedDifficulty: DifficultyKey;
-  selectedMode: ModeKey;
-  selectedGameType: GameType;
-  onGameTypeChange: (gameType: GameType) => void;
-  onDifficultyChange: (difficulty: DifficultyKey) => void;
-  onModeChange: (mode: ModeKey) => void;
+  selectedDifficulty: TDifficultyKey;
+  selectedMode: TModeKey;
+  selectedGameType: TGameType;
+  roundsMode: TRoundsMode;
+  selectedRounds: number;
+  onDifficultyChange: (difficulty: TDifficultyKey) => void;
+  onModeChange: (mode: TModeKey) => void;
+  onGameTypeChange: (gameType: TGameType) => void;
+  onRoundsModeChange: (mode: TRoundsMode) => void;
+  onSelectedRoundsChange: (rounds: number) => void;
   onStartGame: () => void;
 };
 
 // StatsPanel.tsx
-export type GameHistoryItem = {
+export type TGameHistoryItem = {
   from: number;
   to: number;
   answer: number;
   correct: boolean;
 };
 
-export type HistoryItemProps = {
+export type THistoryItemProps = {
   from: string;
   to: string;
   answer: string;
@@ -76,29 +90,29 @@ export type HistoryItemProps = {
   isDarkMode: boolean;
 };
 
-export type StatsPanelProps = {
+export type TStatsPanelProps = {
   isDarkMode: boolean;
-  gameType: GameType;
+  gameType: TGameType;
   score: number;
   bestResult: string;
   streak: number;
   correctAnswers: number;
   mistakes: number;
   accuracy: number;
-  history: GameHistoryItem[];
+  history: TGameHistoryItem[];
   onOpenHistory: () => void;
 };
 
 // GameResult.tsx
-export type GameResultProps = {
+export type TGameResultProps = {
   isDarkMode: boolean;
-  gameType: GameType;
+  gameType: TGameType;
   score: number;
   correctAnswers: number;
   mistakes: number;
   totalAttempts: number;
   completedRounds: number;
-  totalRounds: number;
+  totalRounds: number | null;
   finalUserAnswer: number | null;
   finalCorrectAnswer: number | null;
   onPlayAgain: () => void;
@@ -106,7 +120,7 @@ export type GameResultProps = {
   time: string;
 };
 
-export type ResultCardProps = {
+export type TResultCardProps = {
   label: string;
   value: string;
   isDarkMode: boolean;

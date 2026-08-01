@@ -1,12 +1,14 @@
 import { Clock3 } from "lucide-react";
-import { type IGameBoard, type NumberCardProps } from "../types/game";
+import { type IGameBoard, type INumberCardProps } from "../types/game";
 
 export const GameBoard = ({
   isDarkMode,
+  totalRounds,
+  canFinishGame,
+  onFinishGame,
   previousNumber,
   currentNumber,
   round,
-  totalRounds,
   isGameStarted,
   userAnswer,
   onAnswerChange,
@@ -32,7 +34,7 @@ export const GameBoard = ({
             <span
               className={`ml-3 ${isDarkMode ? "text-white" : "text-slate-950"}`}
             >
-              {round} / {totalRounds}
+              {round} / {totalRounds ?? "∞"}
             </span>
           </h2>
 
@@ -104,6 +106,20 @@ export const GameBoard = ({
           className={`h-[78px] w-full rounded-[16px] border-2 focus:outline-none focus:ring-0 focus:border-transparent ${isDarkMode ? "border-blue-600 bg-slate-800 text-white placeholder:text-slate-500" : "border-blue-600 bg-white text-slate-950 placeholder:text-slate-300"} px-6 text-[26px] font-semibold outline-none transition focus:border-blue-700 focus:ring-4 focus:ring-blue-100`}
         />
 
+        {canFinishGame && isGameStarted && (
+          <button
+            type="button"
+            onClick={onFinishGame}
+            className={`mt-4 h-[52px] w-full cursor-pointer rounded-[14px] border text-[15px] font-extrabold transition ${
+              isDarkMode
+                ? "border-red-800 bg-red-950/30 text-red-400 hover:bg-red-950/50"
+                : "border-red-300 bg-red-50 text-red-600 hover:bg-red-100"
+            }`}
+          >
+            Завершить игру
+          </button>
+        )}
+
         {feedbackMessage && (
           <p
             className={`mt-3 text-[15px] font-bold ${
@@ -124,7 +140,7 @@ export const GameBoard = ({
   );
 };
 
-const NumberCard = ({ label, value, isDarkMode }: NumberCardProps) => {
+const NumberCard = ({ label, value, isDarkMode }: INumberCardProps) => {
   return (
     <div
       className={`flex h-[140px] flex-col items-center justify-center rounded-[18px] border ${isDarkMode ? "bg-slate-800 text-white border-slate-600" : "bg-white text-slate-950 border-slate-200"}`}

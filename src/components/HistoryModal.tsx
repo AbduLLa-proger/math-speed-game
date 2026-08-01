@@ -1,11 +1,11 @@
 import { CheckCircle2, X, XCircle } from "lucide-react";
-import { type HistoryModalProps } from "../types/game";
+import { type THistoryModalProps } from "../types/game";
 
 export const HistoryModal = ({
   isDarkMode,
   history,
   onClose,
-}: HistoryModalProps) => {
+}: THistoryModalProps) => {
   return (
     <div
       role="dialog"

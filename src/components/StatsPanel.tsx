@@ -6,7 +6,7 @@ import {
   Trophy,
   XCircle,
 } from "lucide-react";
-import { type StatsPanelProps, type HistoryItemProps } from "../types/game";
+import { type TStatsPanelProps, type THistoryItemProps } from "../types/game";
 
 export const StatsPanel = ({
   isDarkMode,
@@ -19,7 +19,7 @@ export const StatsPanel = ({
   accuracy,
   history,
   onOpenHistory,
-}: StatsPanelProps) => {
+}: TStatsPanelProps) => {
   const stats = [
     {
       title: "Очки",
@@ -203,7 +203,7 @@ const HistoryItem = ({
   answer,
   correct,
   isDarkMode,
-}: HistoryItemProps) => {
+}: THistoryItemProps) => {
   return (
     <div
       className={`flex h-[54px] items-center justify-between rounded-[14px] border border-slate-200 ${isDarkMode ? "bg-slate-800" : "bg-white"} px-4`}

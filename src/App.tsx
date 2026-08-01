@@ -6,6 +6,7 @@ import { HistoryModal } from "./components/HistoryModal";
 import { StatsPanel } from "./components/StatsPanel";
 import { Sidebar } from "./components/Sidebar.tsx";
 import {
+  calculateAccuracy,
   getInitialPlayerName,
   getInitialBestResults,
   generateChange,
@@ -14,29 +15,32 @@ import {
   formatTime,
 } from "./utils/game.ts";
 import {
-  type GameHistoryItem,
-  type DifficultyKey,
-  type ModeKey,
-  type GameType,
-  type AnswerStatus,
-  type BestResults,
+  type TGameHistoryItem,
+  type TDifficultyKey,
+  type TModeKey,
+  type TGameType,
+  type TAnswerStatus,
+  type TBestResults,
+  type TRoundsMode,
 } from "./types/game.ts";
 
 export const App = () => {
+  const [roundsMode, setRoundsMode] = useState<TRoundsMode>("fixed");
+  const [selectedRounds, setSelectedRounds] = useState(10);
   const [selectedDifficulty, setSelectedDifficulty] =
-    useState<DifficultyKey>("easy");
-  const [selectedMode, setSelectedMode] = useState<ModeKey>("mixed");
+    useState<TDifficultyKey>("easy");
+  const [selectedMode, setSelectedMode] = useState<TModeKey>("mixed");
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [playerName, setPlayerName] = useState(getInitialPlayerName);
 
   const [selectedGameType, setSelectedGameType] =
-    useState<GameType>("practice");
-  const [bestResults, setBestResults] = useState<BestResults>(
+    useState<TGameType>("practice");
+  const [bestResults, setBestResults] = useState<TBestResults>(
     getInitialBestResults,
   );
-  const [answerStatus, setAnswerStatus] = useState<AnswerStatus>("idle");
+  const [answerStatus, setAnswerStatus] = useState<TAnswerStatus>("idle");
 
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [totalAttempts, setTotalAttempts] = useState(0);
@@ -47,12 +51,35 @@ export const App = () => {
   const [streak, setStreak] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-  const [history, setHistory] = useState<GameHistoryItem[]>([]);
+  const [history, setHistory] = useState<TGameHistoryItem[]>([]);
 
   const [previousNumber, setPreviousNumber] = useState(0);
   const [currentNumber, setCurrentNumber] = useState(0);
   const [round, setRound] = useState(0);
   const [isGameStarted, setIsGameStarted] = useState(false);
+
+  const accuracy = calculateAccuracy(correctAnswers, totalAttempts);
+
+  const totalRounds = roundsMode === "fixed" ? selectedRounds : null;
+
+  const finalAttempt = history[0] ?? null;
+
+  const fixedBestResult = bestResults.fixed[selectedRounds] ?? {
+    practiceAccuracy: 0,
+    survivalRounds: 0,
+  };
+
+  const bestResult =
+    roundsMode === "fixed"
+      ? selectedGameType === "practice"
+        ? `${fixedBestResult.practiceAccuracy}%`
+        : `${fixedBestResult.survivalRounds} / ${selectedRounds}`
+      : selectedGameType === "practice"
+        ? `${bestResults.infinite.practiceCorrectAnswers} верно`
+        : `${bestResults.infinite.survivalRounds} раундов`;
+
+  const isSettingsLocked = isGameStarted || isGameOver;
+  const formattedTime = formatTime(elapsedSeconds);
 
   const handleStartGame = () => {
     const startNumber = 0;
@@ -90,6 +117,18 @@ export const App = () => {
     }
   };
 
+  const handleFinishGame = () => {
+    if (
+      !isGameStarted ||
+      roundsMode !== "infinite" ||
+      selectedGameType !== "practice"
+    ) {
+      return;
+    }
+
+    completeGame(accuracy, correctAnswers, "Игра завершена!");
+  };
+
   const handleAnswerChange = (value: string) => {
     setUserAnswer(value);
     setAnswerStatus("idle");
@@ -108,37 +147,88 @@ export const App = () => {
   };
 
   const saveBestResults = (
-    gameType: GameType,
+    gameType: TGameType,
     finalAccuracy: number,
-    finalCorrectAnswer: number,
+    finalCorrectAnswers: number,
   ) => {
     setBestResults((previousResults) => {
-      const nextResults: BestResults =
-        gameType === "practice"
-          ? {
-              ...previousResults,
-              practiceAccuracy: Math.max(
-                previousResults.practiceAccuracy,
-                finalAccuracy,
-              ),
-            }
-          : {
-              ...previousResults,
-              survivalRounds: Math.max(
-                previousResults.survivalRounds,
-                finalCorrectAnswer,
-              ),
-            };
+      let nextResults: TBestResults;
+
+      if (roundsMode === "fixed") {
+        const previousFixedResult = previousResults.fixed[selectedRounds] ?? {
+          practiceAccuracy: 0,
+          survivalRounds: 0,
+        };
+
+        const nextFixedResult =
+          gameType === "practice"
+            ? {
+                ...previousFixedResult,
+                practiceAccuracy: Math.max(
+                  previousFixedResult.practiceAccuracy,
+                  finalAccuracy,
+                ),
+              }
+            : {
+                ...previousFixedResult,
+                survivalRounds: Math.max(
+                  previousFixedResult.survivalRounds,
+                  finalCorrectAnswers,
+                ),
+              };
+
+        nextResults = {
+          ...previousResults,
+          fixed: {
+            ...previousResults.fixed,
+            [selectedRounds]: nextFixedResult,
+          },
+        };
+      } else {
+        nextResults =
+          gameType === "practice"
+            ? {
+                ...previousResults,
+                infinite: {
+                  ...previousResults.infinite,
+                  practiceCorrectAnswers: Math.max(
+                    previousResults.infinite.practiceCorrectAnswers,
+                    finalCorrectAnswers,
+                  ),
+                },
+              }
+            : {
+                ...previousResults,
+                infinite: {
+                  ...previousResults.infinite,
+                  survivalRounds: Math.max(
+                    previousResults.infinite.survivalRounds,
+                    finalCorrectAnswers,
+                  ),
+                },
+              };
+      }
 
       try {
         localStorage.setItem(BEST_RESULTS_KEY, JSON.stringify(nextResults));
       } catch {
         console.error("Не удалось сохранить лучший результат");
-        // Игра продолжит работать, даже если localStorage недоступен.
       }
 
       return nextResults;
     });
+  };
+
+  const completeGame = (
+    finalAccuracy: number,
+    finalCorrectAnswers: number,
+    message: string,
+  ) => {
+    setIsGameStarted(false);
+    setIsGameOver(true);
+    setFeedbackMessage(message);
+
+    saveBestResults(selectedGameType, finalAccuracy, finalCorrectAnswers);
   };
 
   const handleSubmitAnswer = () => {
@@ -153,18 +243,19 @@ export const App = () => {
 
     const nextTotalAttempts = totalAttempts + 1;
     const nextCorrectAnswers = correctAnswers + (isCorrect ? 1 : 0);
-    const nextAccuracy = Math.round(
-      (nextCorrectAnswers / nextTotalAttempts) * 100,
+    const nextAccuracy = calculateAccuracy(
+      nextCorrectAnswers,
+      nextTotalAttempts,
     );
 
-    const historyItem: GameHistoryItem = {
+    const historyItem: TGameHistoryItem = {
       from: previousNumber,
       to: currentNumber,
       answer: parsedAnswer,
       correct: isCorrect,
     };
 
-    setTotalAttempts((previousValue) => previousValue + 1);
+    setTotalAttempts(nextTotalAttempts);
     setHistory((previousHistory) => [historyItem, ...previousHistory]);
     setUserAnswer("");
 
@@ -176,24 +267,12 @@ export const App = () => {
       if (selectedGameType === "practice") {
         setFeedbackMessage("Неверно. Попробуй еще раз.");
         return;
-      } else if (selectedGameType === "survival") {
-        setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
-        setIsGameStarted(false);
-        setIsGameOver(true);
-        const accuracy =
-          totalAttempts === 0
-            ? 0
-            : Math.round((correctAnswers / totalAttempts) * 100);
-
-        saveBestResults(selectedGameType, accuracy, totalAttempts);
-
-        return;
       }
-      setFeedbackMessage(`Игра окончена. Правильный ответ: ${correctAnswer}`);
-      setIsGameStarted(false);
-      setIsGameOver(true);
-
-      saveBestResults(selectedGameType, nextAccuracy, nextCorrectAnswers);
+      completeGame(
+        nextAccuracy,
+        nextCorrectAnswers,
+        `Игра окончена. Правильный ответ: ${correctAnswer}`,
+      );
 
       return;
     }
@@ -204,12 +283,10 @@ export const App = () => {
     setCorrectAnswers((previousValue) => previousValue + 1);
     setStreak((previousStreak) => previousStreak + 1);
 
-    if (round >= 10) {
-      setIsGameStarted(false);
-      setIsGameOver(true);
-      saveBestResults(selectedGameType, nextAccuracy, nextCorrectAnswers);
+    const isFinalRound = roundsMode === "fixed" && round >= selectedRounds;
 
-      setFeedbackMessage("Игра завершена!");
+    if (isFinalRound) {
+      completeGame(nextAccuracy, nextCorrectAnswers, "Игра завершена!");
       return;
     }
 
@@ -225,18 +302,6 @@ export const App = () => {
   const handleToggleTheme = () => {
     setIsDarkMode((prev) => !prev);
   };
-
-  const bestResult =
-    selectedGameType === "practice"
-      ? `${bestResults.practiceAccuracy}%`
-      : `${bestResults.survivalRounds} / 10`;
-  const isSettingsLocked = isGameStarted || isGameOver;
-  const formattedTime = formatTime(elapsedSeconds);
-  const finalAttempt = history[0] ?? null;
-  const accuracy =
-    totalAttempts === 0
-      ? 0
-      : Math.round((correctAnswers / totalAttempts) * 100);
 
   useEffect(() => {
     if (!isGameStarted) {
@@ -275,9 +340,13 @@ export const App = () => {
               selectedDifficulty={selectedDifficulty}
               selectedMode={selectedMode}
               selectedGameType={selectedGameType}
+              roundsMode={roundsMode}
+              selectedRounds={selectedRounds}
               onDifficultyChange={setSelectedDifficulty}
               onModeChange={setSelectedMode}
               onGameTypeChange={setSelectedGameType}
+              onRoundsModeChange={setRoundsMode}
+              onSelectedRoundsChange={setSelectedRounds}
               onStartGame={handleStartGame}
             />
           </div>
@@ -292,7 +361,7 @@ export const App = () => {
                 mistakes={mistakes}
                 totalAttempts={totalAttempts}
                 completedRounds={correctAnswers}
-                totalRounds={10}
+                totalRounds={totalRounds}
                 finalUserAnswer={finalAttempt?.answer ?? null}
                 finalCorrectAnswer={
                   finalAttempt ? finalAttempt.to - finalAttempt.from : null
@@ -304,11 +373,15 @@ export const App = () => {
             ) : (
               <GameBoard
                 isDarkMode={isDarkMode}
+                totalRounds={totalRounds}
+                canFinishGame={
+                  roundsMode === "infinite" && selectedGameType === "practice"
+                }
+                onFinishGame={handleFinishGame}
                 time={formattedTime}
                 previousNumber={previousNumber}
                 currentNumber={currentNumber}
                 round={round}
-                totalRounds={10}
                 isGameStarted={isGameStarted}
                 userAnswer={userAnswer}
                 onAnswerChange={handleAnswerChange}

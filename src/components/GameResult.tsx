@@ -1,5 +1,5 @@
 import { RotateCcw, Settings2, Trophy } from "lucide-react";
-import { type GameResultProps, type ResultCardProps } from "../types/game";
+import { type TGameResultProps, type TResultCardProps } from "../types/game";
 
 export const GameResult = ({
   isDarkMode,
@@ -15,7 +15,7 @@ export const GameResult = ({
   time,
   onPlayAgain,
   onBackToSettings,
-}: GameResultProps) => {
+}: TGameResultProps) => {
   const accuracy =
     totalAttempts === 0
       ? 0
@@ -184,7 +184,7 @@ export const GameResult = ({
   );
 };
 
-const ResultCard = ({ label, value, isDarkMode }: ResultCardProps) => {
+const ResultCard = ({ label, value, isDarkMode }: TResultCardProps) => {
   return (
     <div
       className={`rounded-[18px] border p-5 text-center ${
